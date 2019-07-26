@@ -1,20 +1,26 @@
 from flask import Flask, Response, redirect, url_for, request, session, abort
-from flask_login import LoginManager, UserMixin, \
-    login_required, login_user, logout_user, current_user
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
+from flask_mysqldb import MySQL
+from os import urandom
 
 app = Flask(__name__)
 
-# config
-app.config.update(
-    DEBUG=True,
-    SECRET_KEY='9kLii%20a$#a,1'
-)
+# flask-mysqldb
+app.config['MYSQL_HOST'] = '127.0.0.1'
+app.config['MYSQL_USER'] = 'flask'
+app.config['MYSQL_PASSWORD'] = '9GuuZAJDGuNxmxO0'
+app.config['MYSQL_DB'] = 'flask'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config['SECRET_KEY'] = urandom(24)
+
+mysql = MySQL(app)
 
 # flask-login
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 login_manager.login_message = 'Access denied.'
+
 login_manager.init_app(app)
 
 
@@ -85,4 +91,4 @@ def load_user(userid):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=80, debug=True)
