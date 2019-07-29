@@ -1,4 +1,4 @@
-from flask import Flask, Response, redirect, url_for, request, session, abort
+from flask import Flask, Response, redirect, url_for, request, session, abort, render_template
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from flask_mysqldb import MySQL
 from os import urandom
@@ -27,47 +27,50 @@ login_manager.init_app(app)
 # silly user model
 class User(UserMixin):
 
-    def __init__(self, id):
+    def __init__(self, id, name, type):
         self.id = id
-        self.name = "user" + str(id)
-        self.password = self.name + "_secret"
+        self.name = name
+        self.type = type
 
     def __repr__(self):
-        return "%d/%s/%s" % (self.id, self.name, self.password)
-
-
-# create some users with ids 1 to 20
-users = [User(id) for id in range(1, 21)]
+        return "%d/%s/%s" % (self.id, self.name, self.type)
 
 
 # some protected url
 @app.route('/')
+@app.route('/index')
 @login_required
 def index():
-    return Response("Hello World!" + current_user.name)
+    return render_template('layout.html')
 
 
-# somewhere to login
+# login
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        id = request.form['user_id']
         password = request.form['password']
-        if password == username + "_secret":
-            id = username.split('user')[1]
-            user = User(id)
-            login_user(user)
-            return redirect(url_for("index"))
-        else:
-            return abort(401)
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''' ,(id,))
+        user_seen = cur.fetchall()
+        if not user_seen:
+            return "用户ID输入错误"
+        if password != user_seen[0]["password"]:
+            return "密码输入错误"
+        name = user_seen[0]["user_name"]
+        type = user_seen[0]["user_type"]
+        session['name'] = name
+        session['type'] = type
+        user = User(id, name, type)
+        login_user(user, remember = 'remember_me' in request.form)
+        return redirect(url_for("index"))
     else:
-        return Response('''
-        <form action="" method="post">
-            <p><input type=text name=username>
-            <p><input type=password name=password>
-            <p><input type=submit value=Login>
-        </form>
-        ''')
+        return render_template('login.html')
+
+
+@app.route("/profile")
+def profile():
+    return render_template('profile.html')
 
 
 # somewhere to logout
@@ -75,7 +78,8 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return Response('<p>Logged out</p>')
+    session.clear()
+    return redirect(url_for('login'))
 
 
 # handle login failed
@@ -86,8 +90,8 @@ def page_not_found(e):
 
 # callback to reload the user object
 @login_manager.user_loader
-def load_user(userid):
-    return User(userid)
+def load_user(id):
+    return User(id, session['name'], session['type'])
 
 
 if __name__ == "__main__":
