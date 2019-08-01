@@ -2,7 +2,7 @@ from flask import Flask, Response, redirect, url_for, request, session, abort, r
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from flask_mysqldb import MySQL
 from functools import wraps
-from os import urandom
+from os import urandom\
 
 app = Flask(__name__)
 
@@ -160,11 +160,11 @@ def user_list():
 
 
 # 编辑用户
-@app.route("/user_edit", methods=["GET", "POST"])
+@app.route("/user_edit/<int:uid>", methods=["GET", "POST"])
 @login_required
 @login_type(0)
-def user_edit():
-    uid = request.args.get('user_id')
+def user_edit(uid):
+    # uid = request.args.get('user_id')
     cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''', (uid,))
     ur = cur.fetchone()
@@ -172,16 +172,48 @@ def user_edit():
     if request.method == 'POST':
         cur.execute('''SELECT user_id FROM user_list WHERE user_id=%s ''',(request.form['id'],))
         rv = cur.fetchall()
-        if rv:
-            return render_template('user_edit.html', e=1, user=user)
+        if rv and rv[0]['user_id'] != uid:
+            return redirect(url_for('user_edit' ,eq=1, uid=uid))
+            #return render_template('user_edit.html', e=1, user=user)
         else:
             cur.execute('''UPDATE user_list SET user_id=%s, user_name=%s, user_type=%s WHERE user_id=%s  ''',(request.form['id'], request.form['username'], request.form['type'], uid,))
             mysql.connection.commit()
-            cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''', (uid,))
+            cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''', (request.form['id'],))
             ur = cur.fetchone()
             user = User(ur['user_id'], ur['user_name'], ur['user_type'])
-            return render_template('user_edit.html', e=0, user=user)
-    return render_template('user_edit.html', e=-1, user=user)
+            return redirect(url_for('user_edit', eq=0, uid=ur['user_id']))
+    print(request.args.get('eq'))
+    return render_template('user_edit.html', e=request.args.get('eq'), user=user)
+
+
+# 删除用户
+@app.route("/user_delete", methods=["GET", "POST"])
+@login_required
+@login_type(0)
+def user_delete():
+    uid=request.args.get('user_id')
+    cur=mysql.connection.cursor()
+    cur.execute('''SELECT * FROM user_list WHERE user_id=%s''',(uid,))
+    rv=cur.fetchall()
+    if rv:
+        return render_template('user_delete.html', user=rv[0])
+    else:
+        return redirect(url_for('index'))
+
+
+# 删除用户
+@app.route("/user_cut", methods=["GET", "POST"])
+@login_required
+@login_type(0)
+def user_cut():
+    uid = request.args.get('user_id')
+    print(uid)
+    if (not uid) or uid == '0' or uid == '':
+        return redirect(url_for('user_list'))
+    cur = mysql.connection.cursor()
+    cur.execute('''DELETE FROM user_list WHERE user_id=%s ''', (uid,))
+    mysql.connection.commit()
+    return redirect(url_for('user_list'))
 
 
 if __name__ == "__main__":
