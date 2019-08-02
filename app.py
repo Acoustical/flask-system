@@ -126,8 +126,12 @@ def page_404(e):
 def load_user(id):
     return User(id, session['name'], session['type'])
 
-
-
+################################# 学生模块 #################################
+@app.route("/student_course", methods=["GET", "POST"])
+@login_required
+@login_type(2)
+def student_course():
+    return render_template('student_course.html')
 
 ################################# 管理员模块 #################################
 # 添加用户
