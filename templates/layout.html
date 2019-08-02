@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="{{ url_for('static', filename='production/images/favicon.ico') }}" type="image/ico" />
+    <link rel="icon" href="{{ url_for('static', filename='production/images/favicon.ico') }}" type="image/ico"/>
 
     <title>学迹链系统 | 西电链融</title>
 
@@ -18,218 +18,222 @@
     <link href="{{ url_for('static', filename='vendors/nprogress/nprogress.css') }}" rel="stylesheet">
     <!-- iCheck -->
     <link href="{{ url_for('static', filename='vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
-	
     <!-- bootstrap-progressbar -->
-    <link href="{{ url_for('static', filename='vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}"
+          rel="stylesheet">
     <!-- JQVMap -->
     <link href="{{ url_for('static', filename='vendors/jqvmap/dist/jqvmap.min.css') }}" rel="stylesheet"/>
     <!-- bootstrap-daterangepicker -->
-    <link href="{{ url_for('static', filename='vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendors/bootstrap-daterangepicker/daterangepicker.css') }}"
+          rel="stylesheet">
     {% block css %}
 
     {% endblock %}
     <!-- Custom Theme Style -->
     <link href="{{ url_for('static', filename='build/css/custom.min.css') }}" rel="stylesheet">
-  </head>
+</head>
 
-  <body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
         <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>学迹链系统</span></a>
-            </div>
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>学迹链系统</span></a>
+                </div>
 
-            <div class="clearfix"></div>
+                <div class="clearfix"></div>
 
-            <!-- menu profile quick info -->
-            <div class="profile clearfix">
-              <div class="profile_info">
-                <h2>欢迎, {{ current_user.name }}</h2>
-                <span>用户类型：
-                  {% if current_user.type == 1 %}
-                    教师
-                  {% elif current_user.type == 2 %}
-                    学生
-                  {% elif current_user.type == 0 %}
-                    管理员
-                  {% endif %}
+                <!-- menu profile quick info -->
+                <div class="profile clearfix">
+                    <div class="profile_info">
+                        <h2>欢迎, {{ current_user.name }}</h2>
+                        <span>用户类型：
+                            {% if current_user.type == 1 %}
+                                教师
+                            {% elif current_user.type == 2 %}
+                                学生
+                            {% elif current_user.type == 0 %}
+                                管理员
+                            {% endif %}
                 </span>
-              </div>
-            </div>
-            <!-- /menu profile quick info -->
+                    </div>
+                </div>
+                <!-- /menu profile quick info -->
 
-            <br />
+                <br/>
 
-            <!-- sidebar menu -->
-            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">
-                    <ul class="nav side-menu">
-                      <li><a href="{{ url_for('index') }}"><i class="fa fa-home"></i> 主页 </a></li>
-                    </ul>
-                  {% if current_user.type == 1 %}
-                  {% elif current_user.type == 2 %}
-                    <h3>教学服务</h3>
-                    <ul class="nav side-menu">
-                      <li><a><i class="fa fa-home"></i> 选课系统 <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="#">在线选课</a></li>
-                          <li><a href="#">选课结果</a></li>
+                <!-- sidebar menu -->
+                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                        <ul class="nav side-menu">
+                            <li><a href="{{ url_for('index') }}"><i class="fa fa-home"></i> 主页 </a></li>
                         </ul>
-                      </li>
-                    </ul>
-                  {% elif current_user.type == 0 %}
-                    <h3>系统筹划</h3>
-                    <ul class="nav side-menu">
-                      <li><a><i class="fa fa-home"></i> 用户管理 <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{ url_for('user_add') }}">添加用户</a></li>
-                          <li><a href="{{ url_for('user_list') }}">用户列表</a></li>
-                        </ul>
-                      </li>
-                    </ul>
-                  {% endif %}
-              </div>
-            </div>
-            <!-- /sidebar menu -->
+                        {% if current_user.type == 1 %}
+                        {% elif current_user.type == 2 %}
+                            <h3>教学服务</h3>
+                            <ul class="nav side-menu">
+                                <li><a><i class="fa fa-table"></i> 选课系统 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="#">在线选课</a></li>
+                                        <li><a href="#">选课结果</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        {% elif current_user.type == 0 %}
+                            <h3>系统筹划</h3>
+                            <ul class="nav side-menu">
+                                <li><a><i class="fa fa-users"></i> 用户管理 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ url_for('user_add') }}">添加用户</a></li>
+                                        <li><a href="{{ url_for('user_list') }}">用户列表</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- /sidebar menu -->
 
-            <!-- /menu footer buttons -->
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
+                <!-- /menu footer buttons -->
+                <div class="sidebar-footer hidden-small">
+                    <a data-toggle="tooltip" data-placement="top" title="Settings">
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="Lock">
+                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                    </a>
+                </div>
+                <!-- /menu footer buttons -->
             </div>
-            <!-- /menu footer buttons -->
-          </div>
         </div>
 
         <!-- top navigation -->
         <div class="top_nav">
-          <div class="nav_menu">
-            <nav>
-              <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-              </div>
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
 
-              <ul class="nav navbar-nav navbar-right">
-                <li class="">
-                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="images/img.jpg" alt="">{{ current_user.name }}
-                    <span class=" fa fa-angle-down"></span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="{{ url_for('profile') }}"> 账户信息</a></li>
-                    <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out pull-right"></i> 退出登录</a></li>
-                  </ul>
-                </li>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="">
+                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                               aria-expanded="false">
+                                {{ current_user.name }}
+                                <span class=" fa fa-angle-down"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                <li><a href="{{ url_for('profile') }}"> 账户信息</a></li>
+                                <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out pull-right"></i> 退出登录</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
-                  </a>
-                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                      <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="text-center">
-                        <a>
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </nav>
-          </div>
+                        <li role="presentation" class="dropdown">
+                            <a href="javascript:;" class="info-number" data-toggle="dropdown"
+                               aria-expanded="false">
+                                <p class="text-success"><i class="fa fa-database"></i> {{ config.TOKEN }}</p>
+                            </a>
+                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                {% for tr in config.TRANS %}
+                                <li>
+                                    <a>
+                                        <span>
+                                            <span class="{% if tr['token_change'] > 0 %}text-success{% else %}text-danger{% endif %}"><h6><b>{% if tr['token_change'] > 0 %}+{% endif %}{{ tr['token_change'] }}</b></h6></span>
+                                            <span>{{ tr['time'] }}</span>
+                                        </span>
+                                        <span class="message">
+                                            <b>{{ tr['info'] }}</b>
+                                        </span>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                                <li>
+                                    <div class="text-center">
+                                        <a href="{{ url_for('transition') }}">
+                                            <strong>详细信息</strong>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
         <!-- /top navigation -->
 
         <!-- page content -->
         <div class="right_col" role="main">
-		{% block main %}
-		
-		{% endblock %}
+            {% block main %}
+
+            {% endblock %}
         </div>
         <!-- /page content -->
 
         <!-- footer content -->
         <footer>
-          <div class="pull-right">
-            学迹链 - 西电链融
-          </div>
-          <div class="clearfix"></div>
+            <div class="pull-right">
+                学迹链 - 西电链融
+            </div>
+            <div class="clearfix"></div>
         </footer>
         <!-- /footer content -->
-      </div>
     </div>
+</div>
 
-    <!-- jQuery -->
-    <script src="{{ url_for('static', filename='vendors/jquery/dist/jquery.min.js') }}"></script>
-    <!-- Bootstrap -->
-    <script src="{{ url_for('static', filename='vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <!-- FastClick -->
-    <script src="{{ url_for('static', filename='vendors/fastclick/lib/fastclick.js') }}"></script>
-    <!-- NProgress -->
-    <script src="{{ url_for('static', filename='vendors/nprogress/nprogress.js') }}"></script>
-    <!-- Chart.js -->
-    <script src="{{ url_for('static', filename='vendors/Chart.js/dist/Chart.min.js') }}"></script>
-    <!-- gauge.js -->
-    <script src="{{ url_for('static', filename='vendors/gauge.js/dist/gauge.min.js') }}"></script>
-    <!-- bootstrap-progressbar -->
-    <script src="{{ url_for('static', filename='vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
-    <!-- iCheck -->
-    <script src="{{ url_for('static', filename='vendors/iCheck/icheck.min.js') }}"></script>
-    <!-- Skycons -->
-    <script src="{{ url_for('static', filename='vendors/skycons/skycons.js') }}"></script>
-    <!-- Flot -->
-    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.pie.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.time.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.stack.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.resize.js') }}"></script>
-    <!-- Flot plugins -->
-    <script src="{{ url_for('static', filename='vendors/flot.orderbars/js/jquery.flot.orderBars.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/flot-spline/js/jquery.flot.spline.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/flot.curvedlines/curvedLines.js') }}"></script>
-    <!-- DateJS -->
-    <script src="{{ url_for('static', filename='vendors/DateJS/build/date.js') }}"></script>
-    <!-- JQVMap -->
-    <script src="{{ url_for('static', filename='vendors/jqvmap/dist/jquery.vmap.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/jqvmap/examples/js/jquery.vmap.sampledata.js') }}"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="{{ url_for('static', filename='vendors/moment/min/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendors/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+<!-- jQuery -->
+<script src="{{ url_for('static', filename='vendors/jquery/dist/jquery.min.js') }}"></script>
+<!-- Bootstrap -->
+<script src="{{ url_for('static', filename='vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<!-- FastClick -->
+<script src="{{ url_for('static', filename='vendors/fastclick/lib/fastclick.js') }}"></script>
+<!-- NProgress -->
+<script src="{{ url_for('static', filename='vendors/nprogress/nprogress.js') }}"></script>
+<!-- Chart.js -->
+<script src="{{ url_for('static', filename='vendors/Chart.js/dist/Chart.min.js') }}"></script>
+<!-- gauge.js -->
+<script src="{{ url_for('static', filename='vendors/gauge.js/dist/gauge.min.js') }}"></script>
+<!-- bootstrap-progressbar -->
+<script src="{{ url_for('static', filename='vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
+<!-- iCheck -->
+<script src="{{ url_for('static', filename='vendors/iCheck/icheck.min.js') }}"></script>
+<!-- Skycons -->
+<script src="{{ url_for('static', filename='vendors/skycons/skycons.js') }}"></script>
+<!-- Flot -->
+<script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.pie.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.time.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.stack.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.resize.js') }}"></script>
+<!-- Flot plugins -->
+<script src="{{ url_for('static', filename='vendors/flot.orderbars/js/jquery.flot.orderBars.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/flot-spline/js/jquery.flot.spline.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/flot.curvedlines/curvedLines.js') }}"></script>
+<!-- DateJS -->
+<script src="{{ url_for('static', filename='vendors/DateJS/build/date.js') }}"></script>
+<!-- JQVMap -->
+<script src="{{ url_for('static', filename='vendors/jqvmap/dist/jquery.vmap.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/jqvmap/examples/js/jquery.vmap.sampledata.js') }}"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="{{ url_for('static', filename='vendors/moment/min/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
-    <!-- Custom Theme Scripts -->
-    <script src="{{ url_for('static', filename='build/js/custom.min.js') }}"></script>
-    {% block js %}
+<!-- Custom Theme Scripts -->
+<script src="{{ url_for('static', filename='build/js/custom.min.js') }}"></script>
+{% block js %}
 
-    {% endblock %}
-	
-  </body>
+{% endblock %}
+
+</body>
 </html>
 
