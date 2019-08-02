@@ -199,7 +199,22 @@ def load_user(id):
     return User(id, session['name'], session['type'])
 
 
-
+################################# 学生模块 #################################
+@app.route("/student_course", methods=["GET", "POST"])
+@login_required
+@login_type(2)
+def student_course():
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM course''')
+    rv = cur.fetchall()
+    for r in rv:
+        cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s ''',(r['course_teacher'],))
+        rvv = cur.fetchall()
+        if rvv:
+            r['course_teacher_name'] = rvv[0]['user_name']
+        else:
+            r['course_teacher_name'] = 'Null'
+    return render_template('student_course.html',course_list=rv)
 
 ################################# 管理员模块 #################################
 # 添加用户
@@ -289,4 +304,4 @@ def user_cut():
 
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)

@@ -62,21 +62,20 @@
                 <!-- /menu profile quick info -->
 
                 <br/>
-
-                <!-- sidebar menu -->
-                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                    <div class="menu_section">
-                        <ul class="nav side-menu">
-                            <li><a href="{{ url_for('index') }}"><i class="fa fa-home"></i> 主页 </a></li>
-                        </ul>
-                        {% if current_user.type == 1 %}
-                        {% elif current_user.type == 2 %}
-                            <h3>教学服务</h3>
-                            <ul class="nav side-menu">
-                                <li><a><i class="fa fa-table"></i> 选课系统 <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="#">在线选课</a></li>
-                                        <li><a href="#">选课结果</a></li>
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                    <ul class="nav side-menu">
+                      <li><a href="{{ url_for('index') }}"><i class="fa fa-home"></i> 主页 </a></li>
+                    </ul>
+                  {% if current_user.type == 1 %}
+                  {% elif current_user.type == 2 %}
+                    <h3>教学服务</h3>
+                    <ul class="nav side-menu">
+                      <li><a><i class="fa fa-home"></i> 选课系统 <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li><a href="{{ url_for('student_course')}}">在线选课</a></li>
+                          <li><a href="#">选课结果</a></li>
                                     </ul>
                                 </li>
                             </ul>
