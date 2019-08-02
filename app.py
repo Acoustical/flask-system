@@ -216,6 +216,7 @@ def student_course():
             r['course_teacher_name'] = 'Null'
     return render_template('student_course.html',course_list=rv)
 
+
 ################################# 管理员模块 #################################
 # 添加用户
 @app.route("/user_add", methods=["GET", "POST"])
@@ -304,4 +305,4 @@ def user_cut():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
