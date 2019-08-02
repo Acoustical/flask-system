@@ -2,73 +2,106 @@
 
 
 {% block main %}
-    <div class="clearfix"></div>
 
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2>Table design
-                    <small>Custom design</small>
-                </h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Settings 1</a>
-                            </li>
-                            <li><a href="#">Settings 2</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                    </li>
-                </ul>
-                <div class="clearfix"></div>
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>学生选课 </h3>
+                </div>
             </div>
 
-            <div class="x_content">
-                <form method="post">
-                    <div class="table-responsive">
-                        <table class="table table-striped jambo_table bulk_action">
-                            <thead>
-                            <tr class="headings">
-                                <th>
-                                </th>
-                                <th class="column-title">课程ID</th>
-                                <th class="column-title">课程名</th>
-                                <th class="column-title">任课老师</th>
-                                <th class="column-title">课程信息</th>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>学生选课
+                                <small>选课信息</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
 
-                                </th>
-                                <th class="bulk-actions" colspan="7">
-                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span
-                                            class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for course in course_list %}
-                                <tr class="odd pointer">
-                                    <td class="a-center ">
-                                        <input type="checkbox" class="flat" name="{{ course['course_id'] }}">
-                                    </td>
-                                    <td class=" ">{{ course['course_id'] }}</td>
-                                    <td class=" ">{{ course['course_name'] }}</td>
-                                    <td class=" ">{{ course['course_teacher_name'] }}</td>
-                                    <td class=" ">{{ course['course_info'] }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </form>
-                <div class="form-group">
-                    <div class="col-12">
-                        <button class="btn btn-primary" type="reset">清空</button>
-                        <button type="submit" class="btn btn-success">选课</button>
+                        <div class="x_content">
+                            <form method="post">
+                                <div class="table-responsive">
+                                    <table class="table table-striped jambo_table bulk_action">
+                                        <thead>
+                                        <tr class="headings">
+                                            <th>
+                                            </th>
+                                            <th class="column-title">课程ID</th>
+                                            <th class="column-title">课程名</th>
+                                            <th class="column-title">任课老师</th>
+                                            <th class="column-title">上课时间</th>
+                                            <th class="column-title">学时</th>
+                                            <th class="column-title">学分</th>
+                                            <th class="column-title">课程信息</th>
+
+                                            </th>
+                                            <th class="bulk-actions" colspan="7">
+                                                <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions (
+                                                    <span
+                                                            class="action-cnt"> </span> ) <i
+                                                            class="fa fa-chevron-down"></i></a>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for course in course_list %}
+                                            <tr class="odd pointer">
+                                                <td class="a-center ">
+                                                    <input type="checkbox" class="flat"
+                                                           name="{{ course['course_id'] }}">
+                                                </td>
+                                                <td class=" ">{{ course['course_id'] }}</td>
+                                                <td class=" ">{{ course['course_name'] }}</td>
+                                                <td class=" ">{{ course['course_teacher_name'] }}</td>
+                                                <td class=" ">
+                                                    {% if course['course_weekday'] == 1 %}
+                                                        星期一
+                                                    {% elif course['course_weekday'] == 2 %}
+                                                        星期二
+                                                    {% elif course['course_weekday'] == 3 %}
+                                                        星期三
+                                                    {% elif course['course_weekday'] == 4 %}
+                                                        星期四
+                                                    {% elif course['course_weekday'] == 5 %}
+                                                        星期五
+                                                    {% elif course['course_weekday'] == 6 %}
+                                                        星期六
+                                                    {% endif %}
+                                                    {% if course['course_time']==1 %}
+                                                        第1~2节
+                                                    {% elif course['course_time']==2 %}
+                                                        第3~4节
+                                                    {% elif course['course_time']==3 %}
+                                                        第5~6节
+                                                    {% elif course['course_time']==4 %}
+                                                        第7~8节
+                                                    {% elif course['course_time']==5 %}
+                                                        第9~10节
+                                                    {% endif %}
+                                                </td>
+                                                <td class=" ">{{ course['course_total'] }}学时</td>
+                                                <td class=" ">{{ course['course_credit'] }}学分</td>
+                                                <td class=" ">{{ course['course_info'] }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                            <div class="form-group">
+                                <div class="col-12">
+                                    <button class="btn btn-primary" type="reset">清空</button>
+                                    <button type="submit" class="btn btn-success">选课</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
