@@ -131,7 +131,10 @@ def load_user(id):
 @login_required
 @login_type(2)
 def student_course():
-    return render_template('student_course.html')
+    cur=mysql.connection.cursor()
+    cur.execute('''SELECT * FROM course''')
+    rv=cur.fetchall()
+    return render_template('student_course.html',course_list=rv)
 
 ################################# 管理员模块 #################################
 # 添加用户
