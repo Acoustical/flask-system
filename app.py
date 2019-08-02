@@ -1,8 +1,9 @@
-from flask import Flask, Response, redirect, url_for, request, session, abort, render_template
+from flask import Flask, redirect, url_for, request, session, abort, render_template, g
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from flask_mysqldb import MySQL
 from functools import wraps
-from os import urandom\
+from json import dumps
+from os import urandom
 
 app = Flask(__name__)
 
@@ -77,6 +78,42 @@ def login():
         session['type'] = type
         user = User(id, name, type)
         login_user(user, remember = 'remember_me' in request.form)
+
+        #### 定义 jinja2 全局变量 ####
+        # 交易变量
+        trans = [
+            {
+                'token_change': +3.00,
+                'time': '2019年8月1日 19:32:11',
+                'own': '某个用户',
+                'info': '我帮他带饭了，他给我转了3积分'
+            },
+            {
+                'token_change': -2.00,
+                'time': '2019年8月1日 19:32:11',
+                'own': '某个用户',
+                'info': '我把他捶了一顿，赔偿他2积分'
+            },
+            {
+                'token_change': +1.50,
+                'time': '2019年8月1日 19:32:11',
+                'own': '某个用户',
+                'info': '卖屁股，赚了1.5积分'
+            },
+            {
+                'token_change': -4.50,
+                'time': '2019年8月1日 19:32:11',
+                'own': '某个用户',
+                'info': '练习时长两年半'
+            }
+        ]
+        if len(trans) <= 4:
+            app.config['TRANS'] = trans
+        else:
+            app.config['TRANS'] = trans[0:4]
+        app.config['TOKEN'] = 143.66
+        #### 停止定义 ####
+
         return redirect(url_for("index"))
     else:
         return render_template('login.html')
@@ -115,6 +152,41 @@ def logout():
     return redirect(url_for('login'))
 
 
+# 积分详细信息
+@app.route("/transition")
+@login_required
+def transition():
+    # current_user
+    ##### 此处待调用区块链底层接口 #####
+    trans = [
+        {
+            'token_change': +3.00,
+            'time': '2019年8月1日 19:32:11',
+            'own': '某个用户',
+            'info': '我帮他带饭了，他给我转了3积分'
+        },
+        {
+            'token_change': -2.00,
+            'time': '2019年8月1日 19:32:11',
+            'own': '某个用户',
+            'info': '我把他捶了一顿，赔偿他2积分'
+        },
+        {
+            'token_change': +1.50,
+            'time': '2019年8月1日 19:32:11',
+            'own': '某个用户',
+            'info': '卖屁股，赚了1.5积分'
+        },
+        {
+            'token_change': -4.50,
+            'time': '2019年8月1日 19:32:11',
+            'own': '某个用户',
+            'info': '练习时长两年半'
+        }
+    ]
+    return render_template('transition.html',trans=trans)
+
+
 # 404错误页面
 @app.errorhandler(404)
 def page_404(e):
@@ -126,14 +198,22 @@ def page_404(e):
 def load_user(id):
     return User(id, session['name'], session['type'])
 
+
 ################################# 学生模块 #################################
 @app.route("/student_course", methods=["GET", "POST"])
 @login_required
 @login_type(2)
 def student_course():
-    cur=mysql.connection.cursor()
+    cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM course''')
-    rv=cur.fetchall()
+    rv = cur.fetchall()
+    for r in rv:
+        cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s ''',(r['course_teacher'],))
+        rvv = cur.fetchall()
+        if rvv:
+            r['course_teacher_name'] = rvv[0]['user_name']
+        else:
+            r['course_teacher_name'] = 'Null'
     return render_template('student_course.html',course_list=rv)
 
 ################################# 管理员模块 #################################
