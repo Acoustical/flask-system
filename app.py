@@ -46,7 +46,9 @@ def login_type(type):
             if current_user.type != type:
                 abort(404)
             return func(*args, **kargs)
+
         return __login_type
+
     return _login_type
 
 
@@ -65,7 +67,7 @@ def login():
         id = request.form['user_id']
         password = request.form['password']
         cur = mysql.connection.cursor()
-        cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''' ,(id,))
+        cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''', (id,))
         user_seen = cur.fetchall()
         if not user_seen:
             return "用户ID输入错误"
@@ -76,7 +78,7 @@ def login():
         session['name'] = name
         session['type'] = type
         user = User(id, name, type)
-        login_user(user, remember = 'remember_me' in request.form)
+        login_user(user, remember='remember_me' in request.form)
 
         #### 定义 jinja2 全局变量 ####
         # 交易变量
@@ -137,7 +139,8 @@ def change_password():
             return render_template('change_password.html', e=1)
         if request.form['new-pwd'] != request.form['new2-pwd']:
             return render_template('change_password.html', e=2)
-        cur.execute('''UPDATE user_list SET password=%s WHERE user_id=%s ''', (request.form['new-pwd'], current_user.id))
+        cur.execute('''UPDATE user_list SET password=%s WHERE user_id=%s ''',
+                    (request.form['new-pwd'], current_user.id))
         mysql.connection.commit()
         return render_template('change_password.html', e=0)
     return render_template('change_password.html', e=-1)
@@ -183,7 +186,7 @@ def transition():
             'info': '练习时长两年半'
         }
     ]
-    return render_template('transition.html',trans=trans)
+    return render_template('transition.html', trans=trans)
 
 
 # 404错误页面
@@ -207,13 +210,13 @@ def student_course():
     cur.execute('''SELECT * FROM course''')
     rv = cur.fetchall()
     for r in rv:
-        cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s ''',(r['course_teacher'],))
+        cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s ''', (r['course_teacher'],))
         rvv = cur.fetchall()
         if rvv:
             r['course_teacher_name'] = rvv[0]['user_name']
         else:
             r['course_teacher_name'] = 'Null'
-    return render_template('student_course.html',course_list=rv)
+    return render_template('student_course.html', course_list=rv)
 
 
 ################################# 教师模块 #################################
@@ -255,9 +258,37 @@ def teacher_course_update():
 @login_type(1)
 def teacher_course_list():
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM course WHERE course_teacher=%s ''',(current_user.id,))
+    cur.execute('''SELECT * FROM course WHERE course_teacher=%s ''', (current_user.id,))
     rv = cur.fetchall()
     return render_template('teacher_course_list.html', course_list=rv)
+
+
+# 编辑课程信息
+@app.route("/teacher_course_edit/<int:cid>", methods=["GET", "POST"])
+@login_required
+@login_type(1)
+def teacher_course_edit(cid):
+    # uid = request.args.get('user_id')
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM course WHERE course_id=%s ''', (cid,))
+    cr = cur.fetchone()
+    if request.method == 'POST':
+        cur.execute('''SELECT course_id FROM course WHERE course_id=%s ''', (request.form['course_id'],))
+        rv = cur.fetchall()
+        if rv and rv[0]['course_id'] != cid:
+            return redirect(url_for('teacher_course_edit', eq=1, cid=cid))
+            # return render_template('user_edit.html', e=1, user=user)
+        else:
+            cur.execute(
+                '''UPDATE course SET course_id=%s, course_name=%s, course_weekday=%s, course_time=%s, course_total=%s, course_credit=%s, course_info=%s WHERE course_id=%s  ''',
+                (request.form['course_id'], request.form['course_name'], request.form['course_weekday'],
+                 request.form['course_time'], request.form['course_total'], request.form['course_credit'],
+                 request.form['course_info'], cid,))
+            mysql.connection.commit()
+            cur.execute('''SELECT * FROM course WHERE course_id=%s ''', (request.form['course_id'],))
+            cr = cur.fetchone()
+            return redirect(url_for('teacher_course_edit', eq=0, cid=cr['course_id']))
+    return render_template('teacher_course_edit.html', e=request.args.get('eq'), course=cr)
 
 
 ################################# 管理员模块 #################################
@@ -268,12 +299,13 @@ def teacher_course_list():
 def user_add():
     if request.method == 'POST':
         cur = mysql.connection.cursor()
-        cur.execute('''SELECT user_id FROM user_list WHERE user_id=%s ''',(request.form['id'],))
+        cur.execute('''SELECT user_id FROM user_list WHERE user_id=%s ''', (request.form['id'],))
         rv = cur.fetchall()
         if rv:
             return render_template('user_add.html', e=1)
         else:
-            cur.execute('''INSERT INTO user_list (user_id, user_name, user_type, password) VALUES (%s, %s, %s, %s) ''',(request.form['id'], request.form['username'], request.form['type'], request.form['pwd']))
+            cur.execute('''INSERT INTO user_list (user_id, user_name, user_type, password) VALUES (%s, %s, %s, %s) ''',
+                        (request.form['id'], request.form['username'], request.form['type'], request.form['pwd']))
             mysql.connection.commit()
             return render_template('user_add.html', e=0)
     return render_template('user_add.html', e=-1)
@@ -301,19 +333,19 @@ def user_edit(uid):
     ur = cur.fetchone()
     user = User(ur['user_id'], ur['user_name'], ur['user_type'])
     if request.method == 'POST':
-        cur.execute('''SELECT user_id FROM user_list WHERE user_id=%s ''',(request.form['id'],))
+        cur.execute('''SELECT user_id FROM user_list WHERE user_id=%s ''', (request.form['id'],))
         rv = cur.fetchall()
         if rv and rv[0]['user_id'] != uid:
-            return redirect(url_for('user_edit' ,eq=1, uid=uid))
-            #return render_template('user_edit.html', e=1, user=user)
+            return redirect(url_for('user_edit', eq=1, uid=uid))
+            # return render_template('user_edit.html', e=1, user=user)
         else:
-            cur.execute('''UPDATE user_list SET user_id=%s, user_name=%s, user_type=%s WHERE user_id=%s  ''',(request.form['id'], request.form['username'], request.form['type'], uid,))
+            cur.execute('''UPDATE user_list SET user_id=%s, user_name=%s, user_type=%s WHERE user_id=%s  ''',
+                        (request.form['id'], request.form['username'], request.form['type'], uid,))
             mysql.connection.commit()
             cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''', (request.form['id'],))
             ur = cur.fetchone()
             user = User(ur['user_id'], ur['user_name'], ur['user_type'])
             return redirect(url_for('user_edit', eq=0, uid=ur['user_id']))
-    print(request.args.get('eq'))
     return render_template('user_edit.html', e=request.args.get('eq'), user=user)
 
 
@@ -322,10 +354,10 @@ def user_edit(uid):
 @login_required
 @login_type(0)
 def user_delete():
-    uid=request.args.get('user_id')
-    cur=mysql.connection.cursor()
-    cur.execute('''SELECT * FROM user_list WHERE user_id=%s''',(uid,))
-    rv=cur.fetchall()
+    uid = request.args.get('user_id')
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM user_list WHERE user_id=%s''', (uid,))
+    rv = cur.fetchall()
     if rv:
         return render_template('user_delete.html', user=rv[0])
     else:

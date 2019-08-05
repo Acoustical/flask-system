@@ -87,7 +87,7 @@
                                     <td>{{ course['course_info'] }}</td>
                                     <td>
                                         <a class="label label-info"
-                                           href="#">修改</a>
+                                           href="{{ url_for('teacher_course_edit', cid=course['course_id']) }}">修改</a>
                                         <a class="label label-danger"
                                            href="#">删除</a>
                                     </td>
