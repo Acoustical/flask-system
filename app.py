@@ -2,7 +2,6 @@ from flask import Flask, redirect, url_for, request, session, abort, render_temp
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from flask_mysqldb import MySQL
 from functools import wraps
-from json import dumps
 from os import urandom
 
 app = Flask(__name__)
@@ -215,6 +214,50 @@ def student_course():
         else:
             r['course_teacher_name'] = 'Null'
     return render_template('student_course.html',course_list=rv)
+
+
+################################# 教师模块 #################################
+# 上传课题
+@app.route('/teacher_course_update', methods=["GET", "POST"])
+@login_required
+@login_type(1)
+def teacher_course_update():
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        cur.execute(
+            '''INSERT INTO course (course_id, course_name, course_teacher, course_weekday, course_time, course_total, course_credit, course_info) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)''',
+            (
+                request.form['course_id'],
+                request.form['course_name'],
+                current_user.id,
+                request.form['course_weekday'],
+                request.form['course_time'],
+                request.form['course_total'],
+                request.form['course_credit'],
+                request.form['course_info'],
+            )
+        )
+        mysql.connection.commit()
+        cur.execute(
+            '''INSERT INTO course_student (course_id, student_ids) VALUES (%s, %s)''',
+            (
+                request.form['course_id'],
+                '#',
+            )
+        )
+        mysql.connection.commit()
+    return render_template("teacher_course_update.html")
+
+
+# 课程结果
+@app.route('/teacher_course_list')
+@login_required
+@login_type(1)
+def teacher_course_list():
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM course WHERE course_teacher=%s ''',(current_user.id,))
+    rv = cur.fetchall()
+    return render_template('teacher_course_list.html', course_list=rv)
 
 
 ################################# 管理员模块 #################################
