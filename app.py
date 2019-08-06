@@ -360,6 +360,35 @@ def teacher_course_edit(cid):
     return render_template('teacher_course_edit.html', e=request.args.get('eq'), course=cr)
 
 
+# 删除已发起课程
+@app.route("/teacher_course_delete", methods=["GET", "POST"])
+@login_required
+@login_type(1)
+def teacher_course_delete():
+    cid = request.args.get('course_id')
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM course WHERE course_id=%s''', (cid,))
+    rv = cur.fetchall()
+    if rv:
+        return render_template('teacher_course_delete.html', course=rv[0])
+    else:
+        return redirect(url_for('index'))
+
+
+# 执行删除操作
+@app.route("/teacher_course_cut", methods=["GET", "POST"])
+@login_required
+@login_type(1)
+def teacher_course_cut():
+    cid = request.args.get('course_id')
+    if (not cid) or cid == '':
+        return redirect(url_for('teacher_course_list'))
+    cur = mysql.connection.cursor()
+    cur.execute('''DELETE FROM course WHERE course_id=%s ''', (cid,))
+    mysql.connection.commit()
+    return redirect(url_for('teacher_course_list'))
+
+
 ################################# 管理员模块 #################################
 # 添加用户
 @app.route("/user_add", methods=["GET", "POST"])
@@ -439,7 +468,6 @@ def user_delete():
 @login_type(0)
 def user_cut():
     uid = request.args.get('user_id')
-    print(uid)
     if (not uid) or uid == '0' or uid == '':
         return redirect(url_for('user_list'))
     cur = mysql.connection.cursor()

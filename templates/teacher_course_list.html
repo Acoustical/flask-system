@@ -89,7 +89,7 @@
                                         <a class="label label-info"
                                            href="{{ url_for('teacher_course_edit', cid=course['course_id']) }}">修改</a>
                                         <a class="label label-danger"
-                                           href="#">删除</a>
+                                           href="{{ url_for('teacher_course_delete', course_id=course['course_id']) }}">删除</a>
                                     </td>
                                 </tr>
                             {% endfor %}
