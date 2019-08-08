@@ -43,16 +43,16 @@
                                     <div class="pricing_features">
                                         <ul class="list-unstyled text-left" style="font-size: large">
 
-                                            <li><i class="fa fa-th"></i> <strong style="margin-left: 40px">
+                                            <li><i class="fa fa-info-circle"></i> <strong style="margin-left: 40px">
                                                 课程ID: </strong> {{ course['course_id'] }}
                                             </li>
-                                            <li><i class="fa fa-github-alt"></i> <strong style="margin-left: 40px">
+                                            <li><i class="fa fa-info-circle"></i> <strong style="margin-left: 40px">
                                                 课程名:</strong> {{ course['course_name'] }}
                                             </li>
-                                            <li><i class="fa fa-male"></i> <strong style="margin-left: 40px">
+                                            <li><i class="fa fa-info-circle"></i> <strong style="margin-left: 40px">
                                                 任课老师: </strong> {{ course['course_teacher_name'] }}
                                             </li>
-                                            <li><i class="fa fa-sort-amount-desc"></i> <strong
+                                            <li><i class="fa fa-info-circle"></i> <strong
                                                     style="margin-left: 40px"> 上课时间:</strong>
                                                 {% if course['course_weekday'] == 1 %}
                                                     星期一
@@ -78,19 +78,22 @@
                                                 {% elif course['course_time']==5 %}
                                                     第9~10节
                                                 {% endif %}</li>
-                                            <li><i class="fa fa-tag"></i> <strong style="margin-left: 40px">
+                                            <li><i class="fa fa-info-circle"></i> <strong style="margin-left: 40px">
                                                 学时: </strong> {{ course['course_total'] }}
                                             </li>
-                                            <li><i class="fa fa-credit-card"></i> <strong style="margin-left: 40px">
+                                            <li><i class="fa fa-info-circle"></i> <strong style="margin-left: 40px">
                                                 学分: </strong> {{ course['course_credit'] }}
                                             </li>
                                             <li><i class="fa fa-info-circle"></i> <strong style="margin-left: 40px">
                                                 课程信息: </strong> {{ course['course_info'] }}
                                             </li>
-                                            <li><i class="fa fa-bar-chart"></i> <strong style="margin-left: 40px">
-                                                课程状态: </strong></li>
+
                                             <li>
                                                 <div class="form-group">
+                                                    <label class="control-label col-md-2 col-sm-2 col-xs-4" style="padding-left: 0; padding-right: 0"><i
+                                                            class="fa fa-info-circle"></i> <strong
+                                                            style="margin-left: 40px">课程状态:</strong></label>
+                                                &nbsp;
                                                     <div class="col-md-2 col-sm-2 col-xs-4">
                                                         <select class="form-control" name="course_status"
                                                                 onchange="chg(this)">
@@ -105,23 +108,25 @@
                                                             </option>
                                                         </select>
                                                     </div>
-                                                    <ul class="list-unstyled text-left" style="font-size: large">
-                                                        <li>
-                                                            <label class="control-label col-md-2 col-sm-2 col-xs-4">已上课程节数：</label>
+                                                </div>
+                                            </li>
 
-
-                                                            <div class="col-md-2 col-sm-2 col-xs-4">
-                                                                <input
-                                                                        id="select_else"
-                                                                        name="course_counter"
-                                                                        disabled="disabled"
-                                                                        type="text"
-                                                                        class="form-control col-md-7 col-xs-12"
-                                                                        required="required"
-                                                                        oninput="value=value.replace(/[^\d]/g,'')"/>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+                                            <li>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-2 col-sm-2 col-xs-4" style="padding-left: 0; padding-right: 0"><i
+                                                            class="fa fa-info-circle"></i> <strong
+                                                            style="margin-left: 40px">已上课程节数:</strong></label>
+                                                &nbsp;
+                                                    <div class="col-md-2 col-sm-2 col-xs-4">
+                                                        <input
+                                                                id="select_else"
+                                                                name="course_counter"
+                                                                disabled="disabled"
+                                                                type="text"
+                                                                class="form-control col-md-7 col-xs-12"
+                                                                required="required"
+                                                                oninput="value=value.replace(/[^\d]/g,'')"/>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>

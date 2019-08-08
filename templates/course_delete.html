@@ -18,7 +18,7 @@
     <div class="container">
         <div class="page-title">
             <div class="title_left">
-                <h3>删除课程 </h3>
+                <h3>取消选课 </h3>
             </div>
         </div>
 
@@ -27,8 +27,8 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>需要删除的课程信息
-                            <small>删除课程</small>
+                        <h2>需要取消的课程信息
+                            <small>取消选课</small>
                         </h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="pricing_footer">
-                            <a  href="{{ url_for('course_cut', course_id=course['course_id']) }}"  class="btn btn-danger" role="button">确认删除</a>
+                            <a  href="{{ url_for('course_cut', course_id=course['course_id']) }}"  class="btn btn-danger" role="button">确认</a>
                             <a  href="{{ url_for('student_result') }}" class="btn btn-success" role="button">取消</a>
                         </div>
 

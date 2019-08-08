@@ -202,7 +202,7 @@ def load_user(id):
 
 
 ################################# 学生模块 #################################
-#学生选课
+# 学生选课
 @app.route("/student_course", methods=["GET", "POST"])
 @login_required
 @login_type(2)
@@ -225,7 +225,7 @@ def student_course():
             for r in course_list:
                 rmix.append(r['course_id'])
             if int(cid) not in rmix:
-                #return '错误页，找不到课程'
+                # return '错误页，找不到课程'
                 return render_template('404.html')
             cur.execute('''SELECT student_ids FROM course_student WHERE course_id=%s ''', (cid,))
             course = cur.fetchone()
@@ -233,14 +233,14 @@ def student_course():
             sts = course['student_ids'].split('#')
             if str(current_user.id) in sts:
                 # return redirect(url_for('student_result',e=1))
-                return render_template('student_course.html', course_list=course_list, e=1)   #重复选课
+                return render_template('student_course.html', course_list=course_list, e=1)  # 重复选课
 
             course_st = course['student_ids']
             course_st += current_user.id + '#'
             cur.execute('''UPDATE course_student SET student_ids=%s WHERE course_id=%s ''', (course_st, cid,))
             mysql.connection.commit()
-        return render_template('student_course.html', course_list=course_list, e=0)    #选课成功
-    return render_template('student_course.html', course_list=course_list, e=-1)       #正常选课界面
+        return render_template('student_course.html', course_list=course_list, e=0)  # 选课成功
+    return render_template('student_course.html', course_list=course_list, e=-1)  # 正常选课界面
 
 
 # 选课结果
@@ -266,6 +266,7 @@ def student_result():
             clist.append(cl)
     return render_template('student_result.html', course_list=clist)
 
+
 # 删除选课
 @app.route("/course_delete", methods=["GET", "POST"])
 @login_required
@@ -288,29 +289,69 @@ def course_delete():
         return redirect(url_for('index'))
 
 
-#删除选课
+# 删除选课
 @app.route("/course_cut", methods=["GET", "POST"])
 @login_required
 @login_type(2)
 def course_cut():
     cid = request.args.get('course_id')
     print(cid)
-    if (not cid)  or cid == '':
+    if (not cid) or cid == '':
         return redirect(url_for('student_result'))
     cur = mysql.connection.cursor()
     cur.execute('''SELECT student_ids FROM course_student WHERE course_id=%s ''', (cid,))
     course = cur.fetchone()
 
     course_st = course['student_ids']
-    #repl=current_user.id +'#'
-    #course_st = course_st.replace(repl, '')
+    # repl=current_user.id +'#'
+    # course_st = course_st.replace(repl, '')
     sts = course_st.split('#')
     sts.remove(current_user.id)
-    course_st="#".join(i for i in sts)
+    course_st = "#".join(i for i in sts)
     cur.execute('''UPDATE course_student SET student_ids=%s WHERE course_id=%s ''', (course_st, cid,))
     mysql.connection.commit()
     return redirect(url_for('student_result'))
 
+
+# 问题悬赏
+@app.route("/question_list")
+@login_required
+@login_type(2)
+def question_list():
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM question''')
+    rv = cur.fetchall()
+    for r in rv:
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s''', (r['student_id'],))
+        rvv = cur.fetchall()
+        if rvv:
+            r['student_name'] = rvv[0]['user_name']
+        else:
+            r['student_name'] = 'NULL'
+
+    return render_template('question_list.html', question_list=rv)
+
+
+# 问题悬赏详情
+@app.route("/question_info")
+@login_required
+@login_type(2)
+def question_info():
+    sid = request.args.get('id')
+    time = request.args.get('time')
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s''', (sid, time))
+    rv = cur.fetchall()
+    if rv:
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s''', (rv[0]['student_id'],))
+        rvv = cur.fetchall()
+        if rvv:
+            rv[0]['student_name'] = rvv[0]['user_name']
+        else:
+            rv[0]['student_name'] = 'NULL'
+    return render_template('question_info.html', question=rv[0])
 
 
 ################################# 教师模块 #################################
@@ -472,7 +513,8 @@ def user_cut():
     mysql.connection.commit()
     return redirect(url_for('user_list'))
 
-#课程列表
+
+# 课程列表
 @app.route("/manager_course_list")
 @login_required
 @login_type(0)
@@ -488,12 +530,12 @@ def manager_course_list():
         else:
             r['course_teacher_name'] = 'Null'
     for r in course_list:
-        cur.execute('''SELECT course_status FROM course_student WHERE course_id=%s''',(r['course_id'],))
-        rvv=cur.fetchall()
+        cur.execute('''SELECT course_status FROM course_student WHERE course_id=%s''', (r['course_id'],))
+        rvv = cur.fetchall()
         if rvv:
-            r['course_status']=rvv[0]['course_status']
+            r['course_status'] = rvv[0]['course_status']
         else:
-            r['course_status']='NULL'
+            r['course_status'] = 'NULL'
     return render_template('manager_course_list.html', course_list=course_list)
 
 
@@ -502,7 +544,7 @@ def manager_course_list():
 @login_required
 @login_type(0)
 def manager_course_edit(cid):
-    #cid = request.args.get('cid')
+    # cid = request.args.get('cid')
     cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM course WHERE course_id=%s''', (cid,))
     rv = cur.fetchall()
@@ -535,9 +577,6 @@ def manager_course_edit(cid):
         return render_template('manager_course_edit.html', course=rv[0])
     else:
         return redirect(url_for('index'))
-
-
-
 
 
 if __name__ == "__main__":

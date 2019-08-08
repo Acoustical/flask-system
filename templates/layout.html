@@ -87,6 +87,13 @@
                                         <li><a href="{{ url_for('student_result') }}">选课结果</a></li>
                                     </ul>
                                 </li>
+                                <li><a><i class="fa fa-github"></i> 学习系统 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ url_for('question_list') }}">悬赏列表</a></li>
+                                        <li><a href="#">我的发布</a></li>
+                                    </ul>
+                                </li>
+
                             </ul>
                         {% elif current_user.type == 0 %}
                             <h3>系统筹划</h3>
