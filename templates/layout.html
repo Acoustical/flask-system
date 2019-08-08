@@ -81,7 +81,7 @@
                         {% elif current_user.type == 2 %}
                             <h3>教学服务</h3>
                             <ul class="nav side-menu">
-                                <li><a><i class="fa fa-home"></i> 选课系统 <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-mortar-board"></i> 选课系统 <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="{{ url_for('student_course') }}">在线选课</a></li>
                                         <li><a href="{{ url_for('student_result') }}">选课结果</a></li>
@@ -95,6 +95,11 @@
                                     <ul class="nav child_menu">
                                         <li><a href="{{ url_for('user_add') }}">添加用户</a></li>
                                         <li><a href="{{ url_for('user_list') }}">用户列表</a></li>
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-wrench"></i> 系统状态管理 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ url_for('manager_course_list') }}">课程列表</a></li>
                                     </ul>
                                 </li>
                             </ul>

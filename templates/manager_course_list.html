@@ -1,0 +1,134 @@
+{% extends 'layout.html' %}
+
+
+{% block main %}
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>课程列表 </h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>全部课程
+                                <small>课程信息</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped jambo_table bulk_action">
+                                        <thead>
+                                        <tr class="headings">
+                                            <th class="column-title">课程ID</th>
+                                            <th class="column-title">课程名</th>
+                                            <th class="column-title">任课老师</th>
+                                            <th class="column-title">上课时间</th>
+                                            <th class="column-title">学时</th>
+                                            <th class="column-title">学分</th>
+                                            <th class="column-title">课程信息</th>
+                                            <th class="column-title">课程状态</th>
+                                            <th class="bulk-actions" colspan="7">
+                                                <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions (
+                                                    <span
+                                                            class="action-cnt"> </span> ) <i
+                                                            class="fa fa-chevron-down"></i></a>
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for course in course_list %}
+                                            <tr class="odd pointer">
+                                                <td class=" ">{{ course['course_id'] }}</td>
+                                                <td class=" ">{{ course['course_name'] }}</td>
+                                                <td class=" ">{{ course['course_teacher_name'] }}</td>
+                                                <td class=" ">
+                                                    {% if course['course_weekday'] == 1 %}
+                                                        星期一
+                                                    {% elif course['course_weekday'] == 2 %}
+                                                        星期二
+                                                    {% elif course['course_weekday'] == 3 %}
+                                                        星期三
+                                                    {% elif course['course_weekday'] == 4 %}
+                                                        星期四
+                                                    {% elif course['course_weekday'] == 5 %}
+                                                        星期五
+                                                    {% elif course['course_weekday'] == 6 %}
+                                                        星期六
+                                                    {% endif %}
+                                                    {% if course['course_time']==1 %}
+                                                        第1~2节
+                                                    {% elif course['course_time']==2 %}
+                                                        第3~4节
+                                                    {% elif course['course_time']==3 %}
+                                                        第5~6节
+                                                    {% elif course['course_time']==4 %}
+                                                        第7~8节
+                                                    {% elif course['course_time']==5 %}
+                                                        第9~10节
+                                                    {% endif %}
+                                                </td>
+                                                <td class=" ">{{ course['course_total'] }}学时</td>
+                                                <td class=" ">{{ course['course_credit'] }}学分</td>
+                                                <td class=" ">{{ course['course_info'] }}</td>
+                                                <td class=" ">
+                                                    {% if course['course_status'] == -1 %}
+                                                        正在选课
+                                                    {% elif course['course_status'] == 0 %}
+                                                        选课结束
+                                                    {% elif course['course_status'] > 0 %}
+                                                        已上了{{ course['course_status'] }}节课
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a class="label label-info"
+                                                       href="{{ url_for('manager_course_edit', cid=course['course_id']) }}">修改</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="{{ url_for('static', filename='vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/jquery.hotkeys/jquery.hotkeys.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/google-code-prettify/src/prettify.js') }}"></script>
+    <!-- jQuery Tags Input -->
+    <script src="{{ url_for('static', filename='vendors/jquery.tagsinput/src/jquery.tagsinput.js') }}"></script>
+    <!-- Switchery -->
+    <script src="{{ url_for('static', filename='vendors/switchery/dist/switchery.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ url_for('static', filename='vendors/select2/dist/js/select2.full.min.js') }}"></script>
+    <!-- Parsley -->
+    <script src="{{ url_for('static', filename='vendors/parsleyjs/dist/parsley.min.js') }}"></script>
+    <!-- Autosize -->
+    <script src="{{ url_for('static', filename='vendors/autosize/dist/autosize.min.js') }}"></script>
+    <!-- jQuery autocomplete -->
+    <script src="{{ url_for('static', filename='vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js') }}"></script>
+    <!-- starrr -->
+    <script src="{{ url_for('static', filename='vendors/starrr/dist/starrr.js') }}"></script>
+{% endblock %}
+
