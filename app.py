@@ -354,6 +354,29 @@ def question_info():
     return render_template('question_info.html', question=rv[0])
 
 
+# 我的问题悬赏
+@app.route("/question_my")
+@login_required
+@login_type(2)
+def question_my():
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM question WHERE student_id=%s''', (current_user.id,))
+    rv = cur.fetchall()
+    if rv:
+        for r in rv:
+            cur = mysql.connection.cursor()
+            cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s''', (r['student_id'],))
+            rvv = cur.fetchall()
+            if rvv:
+                r['student_name'] = rvv[0]['user_name']
+            else:
+                r['student_name'] = 'NULL'
+        return render_template('question_my.html', e=0, question_list=rv)
+    else:
+        return render_template('question_my.html', e=1, question_list=rv)
+
+
+
 ################################# 教师模块 #################################
 # 上传课题
 @app.route('/teacher_course_update', methods=["GET", "POST"])
