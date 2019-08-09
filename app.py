@@ -295,7 +295,7 @@ def course_delete():
 @login_type(2)
 def course_cut():
     cid = request.args.get('course_id')
-    print(cid)
+    print(str(cid))
     if (not cid) or cid == '':
         return redirect(url_for('student_result'))
     cur = mysql.connection.cursor()
