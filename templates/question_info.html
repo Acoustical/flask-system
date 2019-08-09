@@ -56,8 +56,11 @@
                         </div>
 
                         <div class="pricing_footer">
-
+                            {% if e == 0 %}
                             <a  href="{{ url_for('question_list') }}" class="btn btn-success" role="button">返回</a>
+                            {% elif e == 1 %}
+                              <a  href="{{ url_for('question_my') }}" class="btn btn-success" role="button">返回</a>
+                            {% endif %}
                         </div>
 
                     </div>

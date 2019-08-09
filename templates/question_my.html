@@ -39,7 +39,8 @@
                                     <th>问题简介</th>
                                     <th>赏金</th>
                                     <th>状态</th>
-                                    <th style="width: 20%">详情</th>
+                                    <th style="width: 15%">详情</th>
+                                    <th ></th>
                                 </tr>
                                 </thead>
 
@@ -71,10 +72,14 @@
                                         </td>
                                         <td>
                                             <a href="
-                                                {{ url_for('question_info',id=question['student_id'],time=question['time']) }}"
+                                                {{ url_for('question_info',id=question['student_id'],time=question['time'],e=1) }}"
                                                class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> 详情
                                             </a>
 
+                                        </td>
+                                        <td>
+                                            <a class="label label-info"
+                                               href="{{ url_for('question_my_edit',id=question['student_id'],time=question['time']) }}">修改</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -82,10 +87,10 @@
                                 </tbody>
 
                             </table>
-                        <div class="pricing_footer">
+                            <div class="pricing_footer">
 
-                            <a href="{{ url_for('user_list') }}" class="btn btn-success" role="button">发布新的悬赏</a>
-                        </div>
+                                <a href="{{ url_for('question_add') }}" class="btn btn-success" role="button">发布新的悬赏</a>
+                            </div>
 
                         </div>
                     </div>

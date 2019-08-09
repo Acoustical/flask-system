@@ -313,8 +313,8 @@ def course_cut():
     return redirect(url_for('student_result'))
 
 
-# 问题悬赏
-@app.route("/question_list")
+# 问题悬赏列表
+@app.route("/question_list", methods=["GET", "POST"])
 @login_required
 @login_type(2)
 def question_list():
@@ -334,10 +334,11 @@ def question_list():
 
 
 # 问题悬赏详情
-@app.route("/question_info")
+@app.route("/question_info", methods=["GET", "POST"])
 @login_required
 @login_type(2)
 def question_info():
+    e = int(request.args.get('e'))
     sid = request.args.get('id')
     time = request.args.get('time')
     cur = mysql.connection.cursor()
@@ -351,11 +352,11 @@ def question_info():
             rv[0]['student_name'] = rvv[0]['user_name']
         else:
             rv[0]['student_name'] = 'NULL'
-    return render_template('question_info.html', question=rv[0])
+    return render_template('question_info.html', question=rv[0], e=e)
 
 
 # 我的问题悬赏
-@app.route("/question_my")
+@app.route("/question_my", methods=["GET", "POST"])
 @login_required
 @login_type(2)
 def question_my():
@@ -375,6 +376,56 @@ def question_my():
     else:
         return render_template('question_my.html', e=1, question_list=rv)
 
+
+# 发布新的悬赏
+@app.route("/question_add", methods=["GET", "POST"])
+@login_required
+@login_type(2)
+def question_add():
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s ''',
+                    (current_user.id, request.form['time'],))
+        rv = cur.fetchall()
+        if rv:
+            return render_template("question_add.html", e=1)
+        else:
+            cur.execute(
+                '''INSERT INTO question (student_id, time, question_intro, token, status, question_info) VALUES (%s, %s, %s, %s, %s, %s)''',
+                (current_user.id, request.form['time'], request.form['question_intro'], request.form['token'], 0,
+                 request.form['question_info'],))
+            mysql.connection.commit()
+            return render_template("question_add.html", e=0)
+
+    return render_template("question_add.html", e=-1)
+
+
+# 修改我的悬赏
+@app.route("/question_my_edit", methods=["GET", "POST"])
+@login_required
+@login_type(2)
+def question_my_edit():
+    sid = request.args.get('id')
+    time = request.args.get('time')
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s''', (sid, time))
+    rv = cur.fetchall()
+    if rv:
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s''', (rv[0]['student_id'],))
+        rvv = cur.fetchall()
+        if rvv:
+            rv[0]['student_name'] = rvv[0]['user_name']
+        else:
+            rv[0]['student_name'] = 'NULL'
+    if request.method == 'POST':
+        cur.execute(
+            '''UPDATE question SET token=%s, status=%s, question_info=%s WHERE student_id=%s AND time=%s ''',
+            (request.form['token'], request.form['status'], request.form['question_info'], current_user.id,
+             rv[0]['time']))
+        mysql.connection.commit()
+        return redirect(url_for('question_my_edit', id=sid, time=time, eq=0))
+    return render_template('question_my_edit.html', question=rv[0])
 
 
 ################################# 教师模块 #################################
@@ -615,7 +666,8 @@ def manager_course_edit(cid):
             rv[0]['course_status'] = 'NULL'
 
         if request.method == 'POST':
-            if request.form['course_status'] == '-1' or request.form['course_status'] == '0':
+            if request.form['course_status'] == '-1' or request.form['course_status'] == '0' or request.form[
+                'course_status'] == '-2':
                 cur.execute('''UPDATE course_student SET course_status=%s WHERE course_id=%s  ''',
                             (request.form['course_status'], cid))
                 mysql.connection.commit()

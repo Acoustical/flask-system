@@ -87,6 +87,8 @@
                                                         正在选课
                                                     {% elif course['course_status'] == 0 %}
                                                         选课结束
+                                                    {% elif course['course_status'] == -2 %}
+                                                        已结课
                                                     {% elif course['course_status'] > 0 %}
                                                         已上了{{ course['course_status'] }}节课
                                                     {% endif %}
