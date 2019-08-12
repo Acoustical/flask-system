@@ -37,7 +37,7 @@
                                                 发起时间:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ question['time'] }}
                                             </li>
                                             <li><i class="fa fa-male"></i> <strong style="margin-left: 40px">
-                                                悬赏简介: </strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ question['question_intro'] }}
+                                                问题简介: </strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ question['question_intro'] }}
                                             </li>
 
                                             <li>
@@ -64,7 +64,7 @@
                                                     <label class=" col-md-2 col-sm-2 col-xs-4"
                                                            style="padding-left: 0; padding-right: 0"><i
                                                             class="fa fa-info-circle"></i> <strong
-                                                            style="margin-left: 40px">悬赏状态:</strong></label>
+                                                            style="margin-left: 40px">问题状态:</strong></label>
                                                     &nbsp;
                                                     <div class="col-md-2 col-sm-2 col-xs-4">
                                                         <select class="form-control" name="status">
@@ -86,7 +86,7 @@
                                                     <label class=" col-md-2 col-sm-2 col-xs-4"
                                                            style="padding-left: 0; padding-right: 0"><i
                                                             class="fa fa-info-circle"></i> <strong
-                                                            style="margin-left: 40px">悬赏详情:</strong></label>
+                                                            style="margin-left: 40px">问题详情:</strong></label>
                                                     &nbsp;
                                                     <div class="col-md-2 col-sm-2 col-xs-4">
                                                         <input
@@ -104,6 +104,15 @@
                                 </div>
 
                                 <div class="pricing_footer">
+
+                                    {% if e == '0' %}
+                                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>修改成功！</strong>
+                                        </div>
+                                    {% endif %}
 
                                     <div class="form-group">
                                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
