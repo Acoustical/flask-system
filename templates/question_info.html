@@ -25,7 +25,7 @@
                         <div class="x_content">
                             <br/>
                             <form id="demo-form3" data-parsley-validate class="form-horizontal form-label-left"
-                                  method="post">
+                                  method="post" >
                                 <div class="">
                                     <div class="pricing_features">
                                         <ul class="list-unstyled text-left" style="font-size: large">
@@ -54,10 +54,39 @@
                                                 问题详情: </strong> {{ question['question_info'] }}
                                             </li>
 
-                                            {% if mv %}
-                                                {% for m in mv %}
+                                            <li>
+                                                <div class="form-group">
+                                                    <label class=" col-md-2 col-sm-2 col-xs-4"
+                                                           style="padding-left: 0; padding-right: 0"><i
+                                                            class="fa fa-info-circle"></i> <strong
+                                                            style="margin-left: 40px">回答问题:</strong></label>
+                                                    &nbsp;
+                                                    <div class="col-md-4 col-sm-2 col-xs-4">
+                                                        <textarea  id="textarea"
+                                                                rows="6"
+                                                                name="answer_info"
+                                                                type="text"
+                                                                class="form-control col-md-7 col-xs-12"
+                                                                required="required"></textarea>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                {% if mv %}
+                                    {% for m in mv %}
+
+                                        <div class="">
+                                            <div class="pricing_features">
+                                                <ul class="list-unstyled text-left" style="font-size: large">
                                                     <li><i class="fa fa-male"></i> <strong style="margin-left: 40px">
-                                                        回答人姓名: </strong> {{ m['answer_name'] }}
+                                                        回答人姓名: </strong> {{ m['answer_name'] }}   {% if e == 1 %}
+                                                        <a href="#"
+                                                           class="btn btn-primary btn-xs"><i class="fa fa-folder"></i>
+                                                            完成悬赏
+                                                        </a>
+                                                    {% endif %}
                                                     </li>
                                                     <li><i class="fa fa-anchor"></i> <strong style="margin-left: 40px">
                                                         回答人类型: </strong> {% if m['answer_type']==1 %}老师
@@ -68,33 +97,12 @@
                                                             style="margin-left: 40px">
                                                         回答内容: </strong> {{ m['answer_info'] }}
                                                     </li>
-                                                {% endfor %}
-                                            {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
 
-
-                                            <li>
-                                                <div class="form-group">
-                                                    <label class=" col-md-2 col-sm-2 col-xs-4"
-                                                           style="padding-left: 0; padding-right: 0"><i
-                                                            class="fa fa-info-circle"></i> <strong
-                                                            style="margin-left: 40px">回答问题:</strong></label>
-                                                    &nbsp;
-                                                    <div class="col-md-4 col-sm-2 col-xs-4">
-                                                        <textarea
-                                                                rows="6"
-                                                                name="answer_info"
-                                                                type="text"
-                                                                class="form-control col-md-7 col-xs-12"
-                                                                required="required">
-                                                        </textarea>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-
-                                        </ul>
-                                    </div>
-                                </div>
+                                    {% endfor %}
+                                {% endif %}
 
                                 <div class="pricing_footer">
 
@@ -109,7 +117,7 @@
 
                                     <div class="form-group">
                                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                            <button type="submit" class="btn btn-success">提交回答</button>
+                                            <button type="submit" class="btn btn-success" >提交回答</button>
 
                                             {% if e == 0 %}
                                                 <a href="{{ url_for('question_list') }}" class="btn btn-success"
@@ -129,4 +137,5 @@
             </div>
         </div>
     </div>
+
 {% endblock %}

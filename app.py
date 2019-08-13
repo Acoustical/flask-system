@@ -127,6 +127,21 @@ def profile():
     return render_template('profile.html')
 
 
+# 查询用户信息
+@app.route("/user_info/<int:uid>", methods=["GET", "POST"])
+@login_required
+def user_info(uid):
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''', (uid,))
+    ur = cur.fetchone()
+    user = User(ur['user_id'], ur['user_name'], ur['user_type'])
+
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM course WHERE course_teacher=%s ''', (uid,))
+    rv = cur.fetchall()
+    return render_template('user_info.html', user=user, course_list=rv)
+
+
 # 修改密码
 @app.route("/change_password", methods=["GET", "POST"])
 @login_required
@@ -315,7 +330,6 @@ def course_cut():
 # 问题悬赏列表
 @app.route("/question_list", methods=["GET", "POST"])
 @login_required
-@login_type(2)
 def question_list():
     cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM question''')
@@ -335,7 +349,6 @@ def question_list():
 # 问题悬赏详情
 @app.route("/question_info", methods=["GET", "POST"])
 @login_required
-@login_type(2)
 def question_info():
     e = int(request.args.get('e'))
     sid = request.args.get('id')
