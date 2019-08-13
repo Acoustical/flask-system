@@ -90,10 +90,11 @@
 
                                             <li>
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-2 col-sm-2 col-xs-4" style="padding-left: 0; padding-right: 0"><i
+                                                    <label class="control-label col-md-2 col-sm-2 col-xs-4"
+                                                           style="padding-left: 0; padding-right: 0"><i
                                                             class="fa fa-info-circle"></i> <strong
                                                             style="margin-left: 40px">课程状态:</strong></label>
-                                                &nbsp;
+                                                    &nbsp;
                                                     <div class="col-md-2 col-sm-2 col-xs-4">
                                                         <select class="form-control" name="course_status"
                                                                 onchange="chg(this)">
@@ -102,6 +103,9 @@
                                                             </option>
                                                             <option value="0"{% if course['course_status'] ==0 %}
                                                                     selected="selected"{% endif %}>选课结束
+                                                            </option>
+                                                            <option value="-2"{% if course['course_status'] ==-2 %}
+                                                                    selected="selected"{% endif %}>已结课
                                                             </option>
                                                             <option value="1"{% if course['course_status'] >0 %}
                                                                     selected="selected"{% endif %}>已上课
@@ -113,10 +117,11 @@
 
                                             <li>
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-2 col-sm-2 col-xs-4" style="padding-left: 0; padding-right: 0"><i
+                                                    <label class="control-label col-md-2 col-sm-2 col-xs-4"
+                                                           style="padding-left: 0; padding-right: 0"><i
                                                             class="fa fa-info-circle"></i> <strong
                                                             style="margin-left: 40px">已上课程节数:</strong></label>
-                                                &nbsp;
+                                                    &nbsp;
                                                     <div class="col-md-2 col-sm-2 col-xs-4">
                                                         <input
                                                                 id="select_else"

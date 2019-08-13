@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, request, session, abort, render_template, g
+from flask import Flask, redirect, url_for, request, session, abort, render_template
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from flask_mysqldb import MySQL
 from functools import wraps
@@ -125,6 +125,21 @@ def login():
 @login_required
 def profile():
     return render_template('profile.html')
+
+
+# 查询用户信息
+@app.route("/user_info/<int:uid>", methods=["GET", "POST"])
+@login_required
+def user_info(uid):
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM user_list WHERE user_id=%s ''', (uid,))
+    ur = cur.fetchone()
+    user = User(ur['user_id'], ur['user_name'], ur['user_type'])
+
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM course WHERE course_teacher=%s ''', (uid,))
+    rv = cur.fetchall()
+    return render_template('user_info.html', user=user, course_list=rv)
 
 
 # 修改密码
@@ -295,7 +310,6 @@ def course_delete():
 @login_type(2)
 def course_cut():
     cid = request.args.get('course_id')
-    print(str(cid))
     if (not cid) or cid == '':
         return redirect(url_for('student_result'))
     cur = mysql.connection.cursor()
@@ -313,10 +327,9 @@ def course_cut():
     return redirect(url_for('student_result'))
 
 
-# 问题悬赏
-@app.route("/question_list")
+# 问题悬赏列表
+@app.route("/question_list", methods=["GET", "POST"])
 @login_required
-@login_type(2)
 def question_list():
     cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM question''')
@@ -334,12 +347,13 @@ def question_list():
 
 
 # 问题悬赏详情
-@app.route("/question_info")
+@app.route("/question_info", methods=["GET", "POST"])
 @login_required
-@login_type(2)
 def question_info():
+    e = int(request.args.get('e'))
     sid = request.args.get('id')
     time = request.args.get('time')
+    f = request.args.get('f')
     cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s''', (sid, time))
     rv = cur.fetchall()
@@ -351,11 +365,32 @@ def question_info():
             rv[0]['student_name'] = rvv[0]['user_name']
         else:
             rv[0]['student_name'] = 'NULL'
-    return render_template('question_info.html', question=rv[0])
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM answer_list WHERE student_id=%s AND time=%s''', (sid, time))
+    mv = cur.fetchall()
+    if mv:
+        for m in mv:
+            cur = mysql.connection.cursor()
+            cur.execute('''SELECT user_name,user_type FROM user_list WHERE user_id=%s''', (m['answer_id'],))
+            mvv = cur.fetchall()
+            if rvv:
+                m['answer_type'] = mvv[0]['user_type']
+                m['answer_name'] = mvv[0]['user_name']
+            else:
+                m['answer_type'] = 'NULL'
+                m['answer_name'] = 'NULL'
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        cur.execute('''INSERT INTO answer_list (student_id, time, answer_id, answer_info) VALUES (%s, %s, %s, %s) ''',
+                    (sid, time, current_user.id, request.form['answer_info']))
+        mysql.connection.commit()
+        return redirect(url_for('question_info', id=sid, e=e, time=time, f=1))
+
+    return render_template('question_info.html', question=rv[0], e=e, mv=mv, f=f)
 
 
 # 我的问题悬赏
-@app.route("/question_my")
+@app.route("/question_my", methods=["GET", "POST"])
 @login_required
 @login_type(2)
 def question_my():
@@ -375,6 +410,57 @@ def question_my():
     else:
         return render_template('question_my.html', e=1, question_list=rv)
 
+
+# 发布新的悬赏
+@app.route("/question_add", methods=["GET", "POST"])
+@login_required
+@login_type(2)
+def question_add():
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s ''',
+                    (current_user.id, request.form['time'],))
+        rv = cur.fetchall()
+        if rv:
+            return render_template("question_add.html", e=1)
+        else:
+            cur.execute(
+                '''INSERT INTO question (student_id, time, question_intro, token, status, question_info) VALUES (%s, %s, %s, %s, %s, %s)''',
+                (current_user.id, request.form['time'], request.form['question_intro'], request.form['token'], 0,
+                 request.form['question_info']))
+            mysql.connection.commit()
+            return render_template("question_add.html", e=0)
+
+    return render_template("question_add.html", e=-1)
+
+
+# 修改我的悬赏
+@app.route("/question_my_edit", methods=["GET", "POST"])
+@login_required
+@login_type(2)
+def question_my_edit():
+    sid = request.args.get('id')
+    time = request.args.get('time')
+    e = request.args.get('eq')
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s''', (sid, time))
+    rv = cur.fetchall()
+    if rv:
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT user_name FROM user_list WHERE user_id=%s''', (rv[0]['student_id'],))
+        rvv = cur.fetchall()
+        if rvv:
+            rv[0]['student_name'] = rvv[0]['user_name']
+        else:
+            rv[0]['student_name'] = 'NULL'
+    if request.method == 'POST':
+        cur.execute(
+            '''UPDATE question SET token=%s, status=%s, question_info=%s WHERE student_id=%s AND time=%s ''',
+            (request.form['token'], request.form['status'], request.form['question_info'], current_user.id,
+             rv[0]['time']))
+        mysql.connection.commit()
+        return redirect(url_for('question_my_edit', id=sid, time=time, eq=0))
+    return render_template('question_my_edit.html', question=rv[0], e=e)
 
 
 ################################# 教师模块 #################################
@@ -400,10 +486,11 @@ def teacher_course_update():
         )
         mysql.connection.commit()
         cur.execute(
-            '''INSERT INTO course_student (course_id, student_ids) VALUES (%s, %s)''',
+            '''INSERT INTO course_student (course_id, student_ids,course_status,course_liked) VALUES (%s, %s,%s,%s)''',
             (
                 request.form['course_id'],
                 '#',
+                0, '#'
             )
         )
         mysql.connection.commit()
@@ -615,7 +702,8 @@ def manager_course_edit(cid):
             rv[0]['course_status'] = 'NULL'
 
         if request.method == 'POST':
-            if request.form['course_status'] == '-1' or request.form['course_status'] == '0':
+            if request.form['course_status'] == '-1' or request.form['course_status'] == '0' or request.form[
+                'course_status'] == '-2':
                 cur.execute('''UPDATE course_student SET course_status=%s WHERE course_id=%s  ''',
                             (request.form['course_status'], cid))
                 mysql.connection.commit()
