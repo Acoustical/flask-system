@@ -1,103 +1,196 @@
 {% extends 'layout.html' %}
 {% block main %}
-        <div class="right_col" role="main">
-          <div class="">
+    <div class="right_col" role="main">
+        <div class="">
             <div class="page-title">
-              <div class="title_left">
-                <h3>账户信息</h3>
-              </div>
+                <div class="title_left">
+                    <h3>账户信息</h3>
+                </div>
             </div>
 
             <div class="clearfix"></div>
 
             <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>个人信息 <small>学迹链系统</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="col-md-3 col-xs-12 profile_left">
-                      <div class="profile_img">
-                        <div id="crop-avatar">
-                          <!-- Current avatar -->
-                          <img class="img-responsive avatar-view" src="{{ url_for('static', filename='production/images/picture.jpg') }}">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>个人信息
+                                <small>学迹链系统</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
                         </div>
-                      </div>
-                      <h3>{{ current_user.name }}</h3>
+                        <div class="x_content">
+                            <div class="col-md-3 col-xs-12 profile_left">
+                                <div class="profile_img">
+                                    <div id="crop-avatar">
+                                        <!-- Current avatar -->
+                                        <img class="img-responsive avatar-view"
+                                             src="{{ url_for('static', filename='production/images/picture.jpg') }}">
+                                    </div>
+                                </div>
+                                <h3>{{ current_user.name }}</h3>
 
-                      <ul class="list-unstyled user_data">
-                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{ current_user.id }}
-                        </li>
+                                <ul class="list-unstyled user_data">
+                                    <li><i class="fa fa-map-marker user-profile-icon"></i> {{ current_user.id }}
+                                    </li>
 
-                        <li>
-                          <i class="fa fa-briefcase user-profile-icon"></i>
-                            {% if current_user.type == 1 %}
-                                教师
-                            {% elif current_user.type == 2 %}
-                                学生
-                            {% elif current_user.type == 0 %}
-                                管理员
-                            {% endif %}
-                        </li>
+                                    <li>
+                                        <i class="fa fa-briefcase user-profile-icon"></i>
+                                        {% if current_user.type == 1 %}
+                                            教师
+                                        {% elif current_user.type == 2 %}
+                                            学生
+                                        {% elif current_user.type == 0 %}
+                                            管理员
+                                        {% endif %}
+                                    </li>
 
-                        <li class="m-top-xs">
-                          <i class="fa fa-external-link user-profile-icon"></i>
-                          网络空间安全
-                        </li>
-                      </ul>
+                                    <li class="m-top-xs">
+                                        <i class="fa fa-external-link user-profile-icon"></i>
+                                        网络空间安全
+                                    </li>
+                                </ul>
 
-                      <a class="btn btn-success" href="{{ url_for('change_password') }}"><i class="fa fa-edit m-right-xs"></i>修改密码</a>
-                      <br />
+                                <a class="btn btn-success" href="{{ url_for('change_password') }}"><i
+                                        class="fa fa-edit m-right-xs"></i>修改密码</a>
+                                <br/>
+                            </div>
+                        </div>
                     </div>
-                     <div class="col-md-9 col-xs-12 profile_right">
-
-                      <!-- start skills -->
-                      <h4>技能指数</h4>
-                      <ul class="list-unstyled user_data">
-                        <li>
-                            <p>思想道德素质 <small> M1</small></p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                          </div>
-                        </li>
-                        <li>
-                          <p>专业理论素质 <small> M2</small></p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="70"></div>
-                          </div>
-                        </li>
-                        <li>
-                          <p>创新精神与实践能力 <small> M3</small></p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="30"></div>
-                          </div>
-                        </li>
-                        <li>
-                          <p>文化素质 <small> M4</small></p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                          </div>
-                        </li>
-                        <li>
-                          <p>身心素质 <small> M5</small></p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="10"></div>
-                          </div>
-                        </li>
-                      </ul>
-                      <!-- end of skills -->
-
-                    </div>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+
+
+                    <div class="x_title">
+                        <h2>各学期模块分
+                            <small>模块分</small>
+                        </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                            <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+
+                                {% for module in module_list %}
+                                    <li role="presentation" class=""><a href="#a{{ module['term_no'] }}" role="tab"
+                                                                        id="profile-tab"
+                                                                        data-toggle="tab"
+                                                                        aria-expanded="false">
+                                        {% if module['term_no'] == 1 %}大一上
+                                        {% elif module['term_no'] ==2 %} 大一下
+                                        {% elif module['term_no'] ==3 %} 大二上
+                                        {% elif module['term_no'] ==4 %} 大二下
+                                        {% elif module['term_no'] ==5 %} 大三上
+                                        {% elif module['term_no'] ==6 %} 大三下
+                                        {% elif module['term_no'] ==7 %} 大四上
+                                        {% elif module['term_no'] ==8 %} 大四下
+
+                                        {% endif %}
+                                    </a>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+
+                                {% for module in module_list %}
+
+                                    <div role="tabpanel" class="tab-pane fade active in"
+                                         id="a{{ module['term_no'] }}"
+                                         aria-labelledby="profile-tab">
+
+                                        <div class="col-md-9 col-xs-12 profile_right">
+                                            <!-- start skills -->
+                                            <h4>技能指数</h4>
+                                            <ul class="list-unstyled user_data">
+                                                <li>
+                                                    <p>思想道德素质
+                                                        <small> M1</small>
+                                                    </p>
+                                                    <div class="progress progress_sm">
+                                                        <div class="progress-bar bg-green" role="progressbar"
+                                                             data-transitiongoal="{{ module['module_one'] }}"></div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <p>专业理论素质
+                                                        <small> M2</small>
+                                                    </p>
+                                                    <div class="progress progress_sm">
+                                                        <div class="progress-bar bg-green" role="progressbar"
+                                                             data-transitiongoal="{{ module['module_two'] }}"></div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <p>创新精神与实践能力
+                                                        <small> M3</small>
+                                                    </p>
+                                                    <div class="progress progress_sm">
+                                                        <div class="progress-bar bg-green" role="progressbar"
+                                                             data-transitiongoal="{{ module['module_three'] }}"></div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <p>文化素质
+                                                        <small> M4</small>
+                                                    </p>
+                                                    <div class="progress progress_sm">
+                                                        <div class="progress-bar bg-green" role="progressbar"
+                                                             data-transitiongoal="{{ module['module_four'] }}"></div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <p>身心素质
+                                                        <small> M5</small>
+                                                    </p>
+                                                    <div class="progress progress_sm">
+                                                        <div class="progress-bar bg-green" role="progressbar"
+                                                             data-transitiongoal="{{ module['module_five'] }}"></div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <!-- end of skills -->
+                                        </div>
+
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
 {% endblock %}

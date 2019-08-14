@@ -29,27 +29,26 @@
                                 <div class="">
                                     <div class="pricing_features">
                                         <ul class="list-unstyled text-left" style="font-size: large">
-
-                                            <li><i class="fa fa-th"></i> <strong style="margin-left: 40px">
-                                                悬赏发起人: </strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ current_user.name }}
-                                            </li>
-
                                             <li>
                                                 <div class="form-group">
                                                     <label class=" col-md-2 col-sm-2 col-xs-4"
                                                            style="padding-left: 0; padding-right: 0"><i
                                                             class="fa fa-github-alt"></i> <strong
-                                                            style="margin-left: 40px">发起时间:</strong></label>
+                                                            style="margin-left: 40px">问题ID:</strong></label>
                                                     &nbsp;
                                                     <div class="col-md-2 col-sm-2 col-xs-4">
                                                         <input
-                                                                name="time"
+                                                                name="question_id"
                                                                 type="text"
                                                                 class="form-control col-md-7 col-xs-12"
                                                                 required="required"/>
                                                     </div>
                                                 </div>
                                             </li>
+                                            <li><i class="fa fa-th"></i> <strong style="margin-left: 40px">
+                                                悬赏发起人: </strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ current_user.name }}
+                                            </li>
+
 
                                             <li>
                                                 <div class="form-group">
@@ -113,19 +112,19 @@
 
                                 <div class="pricing_footer">
                                     {% if e == 0 %}
-                                    <div class="alert alert-success alert-dismissible fade in" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                        <strong>发布成功！</strong>
-                                    </div>
+                                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>发布成功！</strong>
+                                        </div>
                                     {% elif e == 1 %}
-                                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                        <strong>警告！</strong> 一个用户一天只能提交一次悬赏！
-                                    </div>
+                                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>警告！</strong> 问题ID重复！
+                                        </div>
                                     {% endif %}
 
                                     <div class="form-group">

@@ -124,7 +124,10 @@ def login():
 @app.route("/profile")
 @login_required
 def profile():
-    return render_template('profile.html')
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM module_score WHERE user_id=%s ''', (current_user.id,))
+    rv = cur.fetchall()
+    return render_template('profile.html', module_list=rv)
 
 
 # 查询用户信息
@@ -351,11 +354,10 @@ def question_list():
 @login_required
 def question_info():
     e = int(request.args.get('e'))
-    sid = request.args.get('id')
-    time = request.args.get('time')
+    qid = request.args.get('id')
     f = request.args.get('f')
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s''', (sid, time))
+    cur.execute('''SELECT * FROM question WHERE question_id=%s ''', (qid,))
     rv = cur.fetchall()
     if rv:
         cur = mysql.connection.cursor()
@@ -366,7 +368,7 @@ def question_info():
         else:
             rv[0]['student_name'] = 'NULL'
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM answer_list WHERE student_id=%s AND time=%s''', (sid, time))
+    cur.execute('''SELECT * FROM answer_list WHERE question_id=%s''', (qid,))
     mv = cur.fetchall()
     if mv:
         for m in mv:
@@ -381,10 +383,10 @@ def question_info():
                 m['answer_name'] = 'NULL'
     if request.method == 'POST':
         cur = mysql.connection.cursor()
-        cur.execute('''INSERT INTO answer_list (student_id, time, answer_id, answer_info) VALUES (%s, %s, %s, %s) ''',
-                    (sid, time, current_user.id, request.form['answer_info']))
+        cur.execute('''INSERT INTO answer_list (question_id, answer_id, answer_info) VALUES (%s, %s, %s) ''',
+                    (qid, current_user.id, request.form['answer_info']))
         mysql.connection.commit()
-        return redirect(url_for('question_info', id=sid, e=e, time=time, f=1))
+        return redirect(url_for('question_info', id=qid, e=e, f=1))
 
     return render_template('question_info.html', question=rv[0], e=e, mv=mv, f=f)
 
@@ -418,15 +420,15 @@ def question_my():
 def question_add():
     if request.method == 'POST':
         cur = mysql.connection.cursor()
-        cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s ''',
-                    (current_user.id, request.form['time'],))
+        cur.execute('''SELECT * FROM question WHERE question_id=%s ''',
+                    (request.form['question_id'],))
         rv = cur.fetchall()
         if rv:
             return render_template("question_add.html", e=1)
         else:
             cur.execute(
-                '''INSERT INTO question (student_id, time, question_intro, token, status, question_info) VALUES (%s, %s, %s, %s, %s, %s)''',
-                (current_user.id, request.form['time'], request.form['question_intro'], request.form['token'], 0,
+                '''INSERT INTO question (question_id,student_id, question_intro, token, status, question_info) VALUES (%s, %s, %s, %s, %s,%s)''',
+                (request.form['question_id'], current_user.id, request.form['question_intro'], request.form['token'], 0,
                  request.form['question_info']))
             mysql.connection.commit()
             return render_template("question_add.html", e=0)
@@ -439,11 +441,10 @@ def question_add():
 @login_required
 @login_type(2)
 def question_my_edit():
-    sid = request.args.get('id')
-    time = request.args.get('time')
+    qid = request.args.get('id')
     e = request.args.get('eq')
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM question WHERE student_id=%s AND time=%s''', (sid, time))
+    cur.execute('''SELECT * FROM question WHERE question_id=%s''', (qid,))
     rv = cur.fetchall()
     if rv:
         cur = mysql.connection.cursor()
@@ -455,11 +456,10 @@ def question_my_edit():
             rv[0]['student_name'] = 'NULL'
     if request.method == 'POST':
         cur.execute(
-            '''UPDATE question SET token=%s, status=%s, question_info=%s WHERE student_id=%s AND time=%s ''',
-            (request.form['token'], request.form['status'], request.form['question_info'], current_user.id,
-             rv[0]['time']))
+            '''UPDATE question SET  status=%s, question_info=%s WHERE question_id=%s ''',
+            (request.form['status'], request.form['question_info'], qid,))
         mysql.connection.commit()
-        return redirect(url_for('question_my_edit', id=sid, time=time, eq=0))
+        return redirect(url_for('question_my_edit', id=qid, eq=0))
     return render_template('question_my_edit.html', question=rv[0], e=e)
 
 
@@ -716,6 +716,52 @@ def manager_course_edit(cid):
         return render_template('manager_course_edit.html', course=rv[0])
     else:
         return redirect(url_for('index'))
+
+
+# 给学生增加模块分
+@app.route("/module_score_add", methods=["GET", "POST"])
+@login_required
+@login_type(0)
+def module_score_add():
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT * FROM module_score WHERE user_id=%s AND term_no=%s ''',
+                    (request.form['student_id'], request.form['term_no']))
+        rv = cur.fetchall()
+        if rv:
+            if request.form['module_no'] == '1':
+                score = int(rv[0]['module_one']) + int(request.form['score_add'])
+                cur = mysql.connection.cursor()
+                cur.execute('''UPDATE module_score SET module_one=%s WHERE user_id=%s AND term_no=%s   ''',
+                            (score, request.form['student_id'], request.form['term_no']))
+                mysql.connection.commit()
+            if request.form['module_no'] == '2':
+                score = int(rv[0]['module_two']) + int(request.form['score_add'])
+                cur = mysql.connection.cursor()
+                cur.execute('''UPDATE module_score SET module_two=%s WHERE user_id=%s AND term_no=%s   ''',
+                            (score, request.form['student_id'], request.form['term_no']))
+                mysql.connection.commit()
+            if request.form['module_no'] == '3':
+                score = int(rv[0]['module_three']) + int(request.form['score_add'])
+                cur = mysql.connection.cursor()
+                cur.execute('''UPDATE module_score SET module_three=%s WHERE user_id=%s AND term_no=%s   ''',
+                            (score, request.form['student_id'], request.form['term_no']))
+                mysql.connection.commit()
+            if request.form['module_no'] == '4':
+                score = int(rv[0]['module_four']) + int(request.form['score_add'])
+                cur = mysql.connection.cursor()
+                cur.execute('''UPDATE module_score SET module_four=%s WHERE user_id=%s AND term_no=%s   ''',
+                            (score, request.form['student_id'], request.form['term_no']))
+                mysql.connection.commit()
+            if request.form['module_no'] == '5':
+                score = int(rv[0]['module_five']) + int(request.form['score_add'])
+                cur = mysql.connection.cursor()
+                cur.execute('''UPDATE module_score SET module_five=%s WHERE user_id=%s AND term_no=%s   ''',
+                            (score, request.form['student_id'], request.form['term_no']))
+                mysql.connection.commit()
+
+        return redirect(url_for('module_score_add', eq=0))
+    return render_template('module_score_add.html', e=request.args.get('eq'))
 
 
 if __name__ == "__main__":

@@ -25,7 +25,7 @@
                         <div class="x_content">
                             <br/>
                             <form id="demo-form3" data-parsley-validate class="form-horizontal form-label-left"
-                                  method="post" >
+                                  method="post">
                                 <div class="">
                                     <div class="pricing_features">
                                         <ul class="list-unstyled text-left" style="font-size: large">
@@ -34,7 +34,7 @@
                                                 悬赏发起人: </strong> {{ question['student_name'] }}
                                             </li>
                                             <li><i class="fa fa-github-alt"></i> <strong style="margin-left: 40px">
-                                                发起时间:</strong> {{ question['time'] }}
+                                                发起时间:</strong> {{ question['question_time'] }}
                                             </li>
                                             <li><i class="fa fa-male"></i> <strong style="margin-left: 40px">
                                                 问题简介: </strong> {{ question['question_intro'] }}
@@ -62,47 +62,18 @@
                                                             style="margin-left: 40px">回答问题:</strong></label>
                                                     &nbsp;
                                                     <div class="col-md-4 col-sm-2 col-xs-4">
-                                                        <textarea  id="textarea"
-                                                                rows="6"
-                                                                name="answer_info"
-                                                                type="text"
-                                                                class="form-control col-md-7 col-xs-12"
-                                                                required="required"></textarea>
+                                                        <textarea id="textarea"
+                                                                  rows="6"
+                                                                  name="answer_info"
+                                                                  type="text"
+                                                                  class="form-control col-md-7 col-xs-12"
+                                                                  required="required"></textarea>
                                                     </div>
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                                {% if mv %}
-                                    {% for m in mv %}
-
-                                        <div class="">
-                                            <div class="pricing_features">
-                                                <ul class="list-unstyled text-left" style="font-size: large">
-                                                    <li><i class="fa fa-male"></i> <strong style="margin-left: 40px">
-                                                        回答人姓名: </strong> {{ m['answer_name'] }}   {% if e == 1 %}
-                                                        <a href="#"
-                                                           class="btn btn-primary btn-xs"><i class="fa fa-folder"></i>
-                                                            完成悬赏
-                                                        </a>
-                                                    {% endif %}
-                                                    </li>
-                                                    <li><i class="fa fa-anchor"></i> <strong style="margin-left: 40px">
-                                                        回答人类型: </strong> {% if m['answer_type']==1 %}老师
-                                                    {% elif m['answer_type']==2 %}学生
-                                                    {% endif %}
-                                                    </li>
-                                                    <li><i class="fa fa-calendar-o"></i> <strong
-                                                            style="margin-left: 40px">
-                                                        回答内容: </strong> {{ m['answer_info'] }}
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                    {% endfor %}
-                                {% endif %}
 
                                 <div class="pricing_footer">
 
@@ -117,7 +88,7 @@
 
                                     <div class="form-group">
                                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                            <button type="submit" class="btn btn-success" >提交回答</button>
+                                            <button type="submit" class="btn btn-success">提交回答</button>
 
                                             {% if e == 0 %}
                                                 <a href="{{ url_for('question_list') }}" class="btn btn-success"
@@ -132,10 +103,73 @@
                                 </div>
                             </form>
                         </div>
+
                     </div>
                 </div>
             </div>
+
+            {% if mv %}
+                {% for m in mv %}
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+
+                                <div class="x_title">
+                                    <h2>{{ loop.index }}楼
+                                        <small>回答悬赏</small>
+                                    </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                    <div class="">
+                                        <div class="pricing_features">
+                                            <ul class="list-unstyled text-left" style="font-size: large">
+                                                <li><i class="fa fa-male"></i> <strong
+                                                        style="margin-left: 40px">
+                                                    回答人姓名: </strong> {{ m['answer_name'] }}
+                                                    {% if e == 1 %}
+                                                        <a href="#"
+                                                           class="btn btn-primary btn-xs"><i
+                                                                class="fa fa-folder"></i>
+                                                            完成悬赏
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                                <li><i class="fa fa-anchor"></i> <strong
+                                                        style="margin-left: 40px">
+                                                    回答人类型: </strong> {% if m['answer_type']==1 %}老师
+                                                {% elif m['answer_type']==2 %}学生
+                                                {% endif %}
+                                                </li>
+                                                <li><i class="fa fa-calendar-times-o"></i> <strong
+                                                        style="margin-left: 40px">
+                                                    回答时间: </strong> {{ m['answer_time'] }}
+                                                </li>
+                                                <li><i class="fa fa-calendar-o"></i> <strong
+                                                        style="margin-left: 40px">
+                                                    回答内容: </strong> {{ m['answer_info'] }}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+
         </div>
     </div>
+
 
 {% endblock %}
