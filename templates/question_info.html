@@ -134,7 +134,8 @@
                                                         style="margin-left: 40px">
                                                     回答人姓名: </strong> {{ m['answer_name'] }}
                                                     {% if e == 1 %}
-                                                        <a href="#"
+                                                        
+														<a href="{{ url_for('question_commit',faid=question['student_id'],shouid=m['answer_id'],token=question['token']) }}"
                                                            class="btn btn-primary btn-xs"><i
                                                                 class="fa fa-folder"></i>
                                                             完成悬赏
