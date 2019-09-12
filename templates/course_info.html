@@ -1,0 +1,185 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{ url_for('static', filename='vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{{ url_for('static', filename='vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{{ url_for('static', filename='build/css/custom.min.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block main %}
+    <div class="right_col" role="main">
+        <div class="container">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>课程信息 </h3>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>课程信息
+                                <small>课程</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br/>
+                            <div class="">
+                                <div class="pricing_features">
+                                    <ul class="list-unstyled text-left" style="font-size: large">
+
+                                        <li><i class="fa fa-user"></i> <strong style="margin-left: 40px">
+                                            课程ID: </strong> {{ course['course_id'] }}
+                                        </li>
+                                        <li><i class="fa fa-book"></i> <strong style="margin-left: 40px">
+                                            课程名:</strong> {{ course['course_name'] }}
+                                        </li>
+                                        <li><i class="fa fa-book"></i> <strong style="margin-left: 40px">
+                                            任课教师:</strong> {{ course['course_teacher_name'] }}
+                                        </li>
+                                        <li><i class="fa fa-tags"></i> <strong style="margin-left: 40px"> 上课时间:</strong>
+                                            {% if course['course_weekday'] == 1 %}
+                                                星期一
+                                            {% elif course['course_weekday'] == 2 %}
+                                                星期二
+                                            {% elif course['course_weekday'] == 3 %}
+                                                星期三
+                                            {% elif course['course_weekday'] == 4 %}
+                                                星期四
+                                            {% elif course['course_weekday'] == 5 %}
+                                                星期五
+                                            {% elif course['course_weekday'] == 6 %}
+                                                星期六
+                                            {% endif %}
+                                            {% if course['course_time']==1 %}
+                                                第1~2节
+                                            {% elif course['course_time']==2 %}
+                                                第3~4节
+                                            {% elif course['course_time']==3 %}
+                                                第5~6节
+                                            {% elif course['course_time']==4 %}
+                                                第7~8节
+                                            {% elif course['course_time']==5 %}
+                                                第9~10节
+                                            {% endif %}</li>
+                                        <li><i class="fa fa-users"></i> <strong style="margin-left: 40px">
+                                            学时: </strong> {{ course['course_total'] }}
+                                        </li>
+                                        <li><i class="fa fa-users"></i> <strong style="margin-left: 40px">
+                                            学分: </strong> {{ course['course_credit'] }}
+                                        </li>
+                                        <li><i class="fa fa-users"></i> <strong style="margin-left: 40px">
+                                            课程信息: </strong> {{ course['course_info'] }}
+                                        </li>
+                                        <li><i class="fa fa-users"></i> <strong style="margin-left: 40px">
+                                            课程状态: </strong>
+                                            {% if course['course_status'] == -2 %}
+                                                已结课
+                                            {% elif course['course_status'] == -1 %}
+                                                正在选课阶段
+                                            {% elif course['course_status'] >= 0 %}
+                                                已上 {{ course['course_status'] }} 节课
+                                            {% endif %}
+                                        </li>
+                                        <li><i class="fa fa-users"></i> <strong style="margin-left: 40px">
+                                            当前已有
+                                            {{ course['student_num'] }}
+                                            名学生选择该课程
+                                        </strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {% if course['course_status'] == -2 %}
+                                    <div class="pricing_footer">
+                                        {% if course['not_liked'] == 1 %}
+                                            <a class="btn btn-app" href="{{ url_for('likes',cid=course['course_id'], tid=course['course_teacher'], sid=current_user.id) }}">
+                                                <span class="badge bg-green">{{ course['likes'] }}</span>
+                                                <i class="fa fa-thumbs-up"></i>
+                                                好评（消耗1积分）
+                                            </a>
+                                            <a class="btn btn-app" href="{{ url_for('unlikes',cid=course['course_id'], tid=course['course_teacher'], sid=current_user.id) }}">
+                                                <span class="badge bg-red">{{ course['unlikes'] }}</span>
+                                                <i class="fa fa-thumbs-down"></i>
+                                                差评
+                                            </a>
+                                        {% endif %}
+                                        <a class="btn btn-app">
+                                            <i class="fa fa-keyboard-o"></i>
+                                            评论
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>课程评论
+                                <small>学生评论</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <ul class="list-unstyled timeline">
+                                {% if comments %}
+                                    {% for comment in comments %}
+                                        <li>
+                                            <div class="block">
+                                                <div class="tags">
+                                                    <a href="" class="tag">
+                                                        <span>{{ comment['username'] }}</span>
+                                                    </a>
+                                                </div>
+                                                <div class="block_content">
+                                                    <div class="byline">
+                                                        <span>{{ comment['comment_time'] }}</span>
+                                                    </div>
+
+                                                    <pre class="excerpt"
+                                                         style="white-space: pre-wrap;word-wrap: break-word;">{{ comment['comment'] }}</pre>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>
+                                        <div class="block">
+                                            <div class="block_content">
+                                                <div class="byline">
+                                                    <span>暂无评论</span>
+                                                </div>
+                                                <p class="excerpt">（= ^u^ =）</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

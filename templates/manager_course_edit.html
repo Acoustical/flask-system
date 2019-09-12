@@ -126,7 +126,13 @@
                                                         <input
                                                                 id="select_else"
                                                                 name="course_counter"
-                                                                disabled="disabled"
+                                                                {% if course['course_status'] <= 0 %} value=""
+                                                                {% elif course['course_status'] > 0 %}
+                                                                value="{{ course['course_status'] }}"
+                                                                {% endif %}
+                                                                {% if course['course_status']<=0 %}
+                                                                disabled="disabled" {% endif %}
+
                                                                 type="text"
                                                                 class="form-control col-md-7 col-xs-12"
                                                                 required="required"

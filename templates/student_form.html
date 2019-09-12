@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+    <link href="{{ url_for('static', filename='vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"
+          rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}"
+          rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}"
+          rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}"
+          rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}"
+          rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>课程表 </h3>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>课程表 </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <table class="table table-bordered" style="table-layout:fixed;text-align: center" align="center" valign="center">
+                                <thead>
+                                <tr>
+                                    <th style="text-align: center">#</th>
+                                    <th style="text-align: center">星期一</th>
+                                    <th style="text-align: center">星期二</th>
+                                    <th style="text-align: center">星期三</th>
+                                    <th style="text-align: center">星期四</th>
+                                    <th style="text-align: center">星期五</th>
+                                    <th style="text-align: center">星期六</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for cfd in course_form %}
+                                <tr>
+                                    <th scope="row"  style="text-align: center">
+                                        第{{ loop.index * 2 - 1 }}~{{ loop.index * 2 }}节课
+                                    </th>
+                                    {% for ct in cfd %}
+                                        <td style="text-align: center">
+                                            {% for c in ct %}
+                                                <a class="label label-info" href="{{ url_for('course_info', cid=c['course_id']) }}">{{ c['course_name'] }}</a>
+                                            {% endfor %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

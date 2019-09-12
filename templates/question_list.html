@@ -33,7 +33,7 @@
                             <table class="table table-striped projects">
                                 <thead>
                                 <tr>
-                                    <th style="width: 1%">#</th>
+                                    <th style="width: 5%">问题ID</th>
                                     <th style="width: 20%">悬赏发起人</th>
                                     <th>发起时间</th>
                                     <th>问题简介</th>
@@ -44,37 +44,38 @@
                                 </thead>
                                 <tbody>
                                 {% for question in question_list %}
-                                <tr>
-                                    <td>#</td>
-                                    <td>
-                                        {{ question['student_name'] }}
-                                    </td>
+                                    <tr>
+                                        <td>{{ question['question_id'] }}</td>
+                                        <td>
+                                            {{ question['student_name'] }}
+                                        </td>
 
-                                    <td> {{ question['time'] }}</td>
-                                    <td class="">
-                                       {{ question['question_intro'] }}
+                                        <td> {{ question['question_time'] }}</td>
+                                        <td class="">
+                                            {{ question['question_intro'] }}
 
-                                    </td>
-                                    <td>
-                                        <ul class="list-unstyled text-left" style="font-size: large">
-                                       <li> <a class="text-success">{{ question['token'] }}</a><i class="fa fa-database"></i></li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        {% if  question['status']  == 0 %}
-                                            未解决
-                                            {% elif   question['status']  == 1 %}
-                                            已解决
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <a href="
-                                                {{ url_for('question_info',id=question['student_id'],time=question['time'],e=0) }}"
-                                           class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> 详情
-                                        </a>
+                                        </td>
+                                        <td>
+                                            <ul class="list-unstyled text-left" style="font-size: large">
+                                                <li><a class="text-success">{{ question['token'] }}</a><i
+                                                        class="fa fa-database"></i></li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            {% if  question['status']  == 0 %}
+                                                未解决
+                                            {% elif question['status']  == 1 %}
+                                                已解决
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="
+                                                {{ url_for('question_info',id=question['question_id'],e=0) }}"
+                                               class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> 详情
+                                            </a>
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
 
                                 </tbody>
