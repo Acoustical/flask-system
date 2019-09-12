@@ -1,0 +1,154 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>上传课程计划</h3>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>课程计划
+                                <small>上传课程计划</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-expanded="false"><i class="fa fa-wrench"></i></a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <form method="post" class="form-horizontal form-label-left">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-6">课程ID</label>
+                                    <div class="col-md-2 col-sm-2 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="请输入课程ID" name="course_id"
+                                               oninput="value=value.replace(/[^\d]/g,'')"
+                                               value="{{ course['course_id'] }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-6">课程名</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="请输入课程名" name="course_name"
+                                               value="{{ course['course_name'] }}">
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 hidden-xs"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-4">上课时间</label>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <select class="form-control" name="course_weekday">
+                                            <option value="1"{% if course['course_weekday'] == 1 %}
+                                                    selected="selected"{% endif %}>星期一
+                                            </option>
+                                            <option value="2"{% if course['course_weekday'] == 2 %}
+                                                    selected="selected"{% endif %}>星期二
+                                            </option>
+                                            <option value="3"{% if course['course_weekday'] == 3 %}
+                                                    selected="selected"{% endif %}>星期三
+                                            </option>
+                                            <option value="4"{% if course['course_weekday'] == 4 %}
+                                                    selected="selected"{% endif %}>星期四
+                                            </option>
+                                            <option value="5"{% if course['course_weekday'] == 5 %}
+                                                    selected="selected"{% endif %}>星期五
+                                            </option>
+                                            <option value="6"{% if course['course_weekday'] == 6 %}
+                                                    selected="selected"{% endif %}>星期六
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <select class="form-control" name="course_time">
+                                            <option value="1"{% if course['course_time'] == 1 %}
+                                                    selected="selected"{% endif %}>第1-2节（上午）
+                                            </option>
+                                            <option value="2"{% if course['course_time'] == 2 %}
+                                                    selected="selected"{% endif %}>第3-4节（上午）
+                                            </option>
+                                            <option value="3"{% if course['course_time'] == 3 %}
+                                                    selected="selected"{% endif %}>第5-6节（下午）
+                                            </option>
+                                            <option value="4"{% if course['course_time'] == 4 %}
+                                                    selected="selected"{% endif %}>第7-8节（下午）
+                                            </option>
+                                            <option value="5"{% if course['course_time'] == 5 %}
+                                                    selected="selected"{% endif %}>第9-10节（晚上）
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-6">学时</label>
+                                    <div class="col-md-2 col-sm-2 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="请输入学时" name="course_total"
+                                               value="{{ course['course_total'] }}">
+                                    </div>
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-6">学分</label>
+                                    <div class="col-md-2 col-sm-2 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="请输入学分"
+                                               name="course_credit" value="{{ course['course_credit'] }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-4">课程类型</label>
+                                    <div class="col-md-2 col-sm-2 col-xs-4">
+                                        <select class="form-control" name="course_info">
+                                            <option value="必修"{% if course['course_info'] == '必修' %}
+                                                    selected="selected"{% endif %}>必修
+                                            </option>
+                                            <option value="专业选修"{% if course['course_info'] == '专业选修' %}
+                                                    selected="selected"{% endif %}>专业选修
+                                            </option>
+                                            <option value="公共选修"{% if course['course_info'] == '公共选修' %}
+                                                    selected="selected"{% endif %}>公共选修
+                                            </option>
+                                            <option value="人文选修"{% if course['course_info'] == '人文选修' %}
+                                                    selected="selected"{% endif %}>人文选修
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ln_solid"></div>
+                                {% if e == '1' %}
+                                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">×</span>
+                                        </button>
+                                        <strong>警告！</strong> 课程 ID 已被占用！请重新输入！
+                                    </div>
+                                {% elif e == '0' %}
+                                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">×</span>
+                                        </button>
+                                        <strong>修改成功！</strong>
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                        <button type="reset" class="btn btn-primary">重置</button>
+                                        <button type="submit" class="btn btn-success">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

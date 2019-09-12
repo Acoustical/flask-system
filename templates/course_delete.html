@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+<!-- Bootstrap -->
+<link href="{{ url_for('static', filename='vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="{{ url_for('static', filename='vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+<!-- NProgress -->
+<link href="{{ url_for('static', filename='vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+
+<!-- Custom Theme Style -->
+<link href="{{ url_for('static', filename='build/css/custom.min.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block main %}
+<div class="right_col" role="main">
+    <div class="container">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>取消选课 </h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>需要取消的课程信息
+                            <small>取消选课</small>
+                        </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+                        <div class="">
+                            <div class="pricing_features">
+                                <ul class="list-unstyled text-left" style="font-size: large">
+
+                                    <li><i class="fa fa-th"></i> <strong style="margin-left: 40px"> 课程ID: </strong> {{
+                                        course['course_id'] }}
+                                    </li>
+                                    <li><i class="fa fa-github-alt"></i> <strong style="margin-left: 40px"> 课程名:</strong> {{
+                                        course['course_name'] }}
+                                    </li>
+                                    <li><i class="fa fa-male"></i> <strong style="margin-left: 40px"> 任课老师: </strong> {{
+                                        course['course_teacher_name'] }}
+                                    </li>
+                                    <li><i class="fa fa-sort-amount-desc"></i> <strong style="margin-left: 40px"> 上课时间:</strong>{% if course['course_weekday'] == 1 %}
+                                                        星期一
+                                                    {% elif course['course_weekday'] == 2 %}
+                                                        星期二
+                                                    {% elif course['course_weekday'] == 3 %}
+                                                        星期三
+                                                    {% elif course['course_weekday'] == 4 %}
+                                                        星期四
+                                                    {% elif course['course_weekday'] == 5 %}
+                                                        星期五
+                                                    {% elif course['course_weekday'] == 6 %}
+                                                        星期六
+                                                    {% endif %}
+                                                    {% if course['course_time']==1 %}
+                                                        第1~2节
+                                                    {% elif course['course_time']==2 %}
+                                                        第3~4节
+                                                    {% elif course['course_time']==3 %}
+                                                        第5~6节
+                                                    {% elif course['course_time']==4 %}
+                                                        第7~8节
+                                                    {% elif course['course_time']==5 %}
+                                                        第9~10节
+                                                    {% endif %}</li>
+                                    <li><i class="fa fa-tag"></i> <strong style="margin-left: 40px"> 学时: </strong> {{ course['course_total'] }}
+                                    </li>
+                                    <li><i class="fa fa-credit-card"></i> <strong style="margin-left: 40px"> 学分: </strong> {{ course['course_credit'] }}
+                                    </li>
+                                    <li><i class="fa fa-info-circle"></i> <strong style="margin-left: 40px"> 课程信息: </strong> {{ course['course_info'] }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pricing_footer">
+                            <a  href="{{ url_for('course_cut', course_id=course['course_id']) }}"  class="btn btn-danger" role="button">确认</a>
+                            <a  href="{{ url_for('student_result') }}" class="btn btn-success" role="button">取消</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

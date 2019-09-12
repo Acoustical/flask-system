@@ -1,0 +1,176 @@
+{% extends 'layout.html' %}
+{% block main %}
+    <div class="right_col" role="main">
+        <div class="container">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>悬赏详情 </h3>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>悬赏信息
+                                <small>悬赏</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br/>
+                            <form id="demo-form3" data-parsley-validate class="form-horizontal form-label-left"
+                                  method="post">
+                                <div class="">
+                                    <div class="pricing_features">
+                                        <ul class="list-unstyled text-left" style="font-size: large">
+
+                                            <li><i class="fa fa-th"></i> <strong style="margin-left: 40px">
+                                                悬赏发起人: </strong> {{ question['student_name'] }}
+                                            </li>
+                                            <li><i class="fa fa-github-alt"></i> <strong style="margin-left: 40px">
+                                                发起时间:</strong> {{ question['question_time'] }}
+                                            </li>
+                                            <li><i class="fa fa-male"></i> <strong style="margin-left: 40px">
+                                                问题简介: </strong> {{ question['question_intro'] }}
+                                            </li>
+
+                                            <li><i class="fa fa-tag"></i> <strong style="margin-left: 40px">
+                                                悬赏金额: </strong> {{ question['token'] }}<i class="fa fa-database"></i>
+                                            </li>
+                                            <li><i class="fa fa-credit-card"></i> <strong style="margin-left: 40px">
+                                                问题状态: </strong>  {% if  question['status']  == 0 %}
+                                                未解决
+                                            {% elif question['status']  == 1 %}
+                                                已解决
+                                            {% endif %}
+                                            </li>
+                                            <li><i class="fa fa-info-circle"></i> <strong style="margin-left: 40px">
+                                                问题详情: </strong> {{ question['question_info'] }}
+                                            </li>
+
+                                            <li>
+                                                <div class="form-group">
+                                                    <label class=" col-md-2 col-sm-2 col-xs-4"
+                                                           style="padding-left: 0; padding-right: 0"><i
+                                                            class="fa fa-info-circle"></i> <strong
+                                                            style="margin-left: 40px">回答问题:</strong></label>
+                                                    &nbsp;
+                                                    <div class="col-md-4 col-sm-2 col-xs-4">
+                                                        <textarea id="textarea"
+                                                                  rows="6"
+                                                                  name="answer_info"
+                                                                  type="text"
+                                                                  class="form-control col-md-7 col-xs-12"
+                                                                  required="required"></textarea>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="pricing_footer">
+
+                                    {% if f == '1' %}
+                                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>提交成功！</strong>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="form-group">
+                                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                            <button type="submit" class="btn btn-success">提交回答</button>
+
+                                            {% if e == 0 %}
+                                                <a href="{{ url_for('question_list') }}" class="btn btn-success"
+                                                   role="button">返回</a>
+                                            {% elif e == 1 %}
+                                                <a href="{{ url_for('question_my') }}" class="btn btn-success"
+                                                   role="button">返回</a>
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {% if mv %}
+                {% for m in mv %}
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+
+                                <div class="x_title">
+                                    <h2>{{ loop.index }}楼
+                                        <small>回答悬赏</small>
+                                    </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                    <div class="">
+                                        <div class="pricing_features">
+                                            <ul class="list-unstyled text-left" style="font-size: large">
+                                                <li><i class="fa fa-male"></i> <strong
+                                                        style="margin-left: 40px">
+                                                    回答人姓名: </strong> {{ m['answer_name'] }}
+                                                    {% if e == 1 %}
+                                                        
+														<a href="{{ url_for('question_commit',faid=question['student_id'],shouid=m['answer_id'],token=question['token']) }}"
+                                                           class="btn btn-primary btn-xs"><i
+                                                                class="fa fa-folder"></i>
+                                                            完成悬赏
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                                <li><i class="fa fa-anchor"></i> <strong
+                                                        style="margin-left: 40px">
+                                                    回答人类型: </strong> {% if m['answer_type']==1 %}老师
+                                                {% elif m['answer_type']==2 %}学生
+                                                {% endif %}
+                                                </li>
+                                                <li><i class="fa fa-calendar-times-o"></i> <strong
+                                                        style="margin-left: 40px">
+                                                    回答时间: </strong> {{ m['answer_time'] }}
+                                                </li>
+                                                <li><i class="fa fa-calendar-o"></i> <strong
+                                                        style="margin-left: 40px">
+                                                    回答内容: </strong> {{ m['answer_info'] }}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+
+
+{% endblock %}

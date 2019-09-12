@@ -62,22 +62,48 @@
                 <!-- /menu profile quick info -->
 
                 <br/>
-            <!-- sidebar menu -->
-            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">
-                    <ul class="nav side-menu">
-                      <li><a href="{{ url_for('index') }}"><i class="fa fa-home"></i> 主页 </a></li>
-                    </ul>
-                  {% if current_user.type == 1 %}
-                  {% elif current_user.type == 2 %}
-                    <h3>教学服务</h3>
-                    <ul class="nav side-menu">
-                      <li><a><i class="fa fa-home"></i> 选课系统 <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{ url_for('student_course')}}">在线选课</a></li>
-                          <li><a href="#">选课结果</a></li>
+                <!-- sidebar menu -->
+                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                        <ul class="nav side-menu">
+                            <li><a href="{{ url_for('index') }}"><i class="fa fa-home"></i> 主页 </a></li>
+                        </ul>
+                        {% if current_user.type == 1 %}
+                            <h3>教学计划</h3>
+                            <ul class="nav side-menu">
+                                <li><a><i class="fa fa-home"></i> 课程管理 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ url_for('teacher_course_update') }}">上传课程</a></li>
+                                        <li><a href="{{ url_for('teacher_course_list') }}">待选课程</a></li>
+										<li><a href="{{ url_for('teacher_course_form') }}">课程表</a></li>
                                     </ul>
                                 </li>
+
+                              <li><a><i class="fa fa-github"></i> 悬赏答疑 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                          <li><a href="{{ url_for('question_list') }}">悬赏列表</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        {% elif current_user.type == 2 %}
+                            <h3>教学服务</h3>
+                            <ul class="nav side-menu">
+                                <li><a><i class="fa fa-mortar-board"></i> 选课系统 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ url_for('student_course') }}">在线选课</a></li>
+                                        <li><a href="{{ url_for('student_result') }}">选课结果</a></li>
+										<li><a href="{{ url_for('student_result_form') }}">课程表</a></li>
+										
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-github"></i> 学习系统 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ url_for('question_list') }}">悬赏列表</a></li>
+                                        <li><a href="{{ url_for('question_my') }}">我的发布</a></li>
+										<li><a href="{{ url_for('user_query') }}">查询用户</a></li>
+                                    </ul>
+                                </li>
+
                             </ul>
                         {% elif current_user.type == 0 %}
                             <h3>系统筹划</h3>
@@ -86,6 +112,12 @@
                                     <ul class="nav child_menu">
                                         <li><a href="{{ url_for('user_add') }}">添加用户</a></li>
                                         <li><a href="{{ url_for('user_list') }}">用户列表</a></li>
+                                         <li><a href="{{ url_for('module_score_add') }}">增加模块积分</a></li>
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-wrench"></i> 系统状态管理 <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ url_for('manager_course_list') }}">课程列表</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -142,17 +174,18 @@
                             </a>
                             <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                                 {% for tr in config.TRANS %}
-                                <li>
-                                    <a>
+                                    <li>
+                                        <a>
                                         <span>
-                                            <span class="{% if tr['token_change'] > 0 %}text-success{% else %}text-danger{% endif %}"><h6><b>{% if tr['token_change'] > 0 %}+{% endif %}{{ tr['token_change'] }}</b></h6></span>
+                                            <span class="{% if tr['token_change'] > 0 %}text-success{% else %}text-danger{% endif %}"><h6><b>{% if tr['token_change'] > 0 %}
+                                                +{% endif %}{{ tr['token_change'] }}</b></h6></span>
                                             <span>{{ tr['time'] }}</span>
                                         </span>
-                                        <span class="message">
+                                            <span class="message">
                                             <b>{{ tr['info'] }}</b>
                                         </span>
-                                    </a>
-                                </li>
+                                        </a>
+                                    </li>
                                 {% endfor %}
                                 <li>
                                     <div class="text-center">

@@ -1,0 +1,111 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>增加学生模块积分</h3>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>增加模块分
+                                <small>增加模块分</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-expanded="false"><i class="fa fa-wrench"></i></a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <form method="post" class="form-horizontal form-label-left">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-6">学生ID</label>
+                                    <div class="col-md-3 col-sm-2 col-xs-6">
+                                        <input type="number" class="form-control" placeholder="请输入学生ID"
+                                               name="student_id"
+                                               oninput="value=value.replace(/[^\d]/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-6">增加分数的模块号</label>
+                                    <div class="col-md-3 col-sm-4 col-xs-4">
+                                        <select class="form-control" name="module_no">
+                                            <option value="1">模块一</option>
+                                            <option value="2">模块二</option>
+                                            <option value="3">模块三</option>
+                                            <option value="4">模块四</option>
+                                            <option value="5">模块五</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 hidden-xs"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-4">学期</label>
+                                    <div class="col-md-3 col-sm-4 col-xs-4">
+                                        <select class="form-control" name="term_no">
+                                            <option value="1">大一上学期</option>
+                                            <option value="2">大一下学期</option>
+                                            <option value="3">大二上学期</option>
+                                            <option value="4">大二下学期</option>
+                                            <option value="5">大三上学期</option>
+                                            <option value="6">大三下学期</option>
+                                            <option value="7">大四上学期</option>
+                                            <option value="8">大四下学期</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-6">增加的分数</label>
+                                    <div class="col-md-3 col-sm-2 col-xs-6">
+                                        <input type="number" class="form-control" placeholder="请输入增加的学数"
+                                               name="score_add">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-4">增加分数的原因</label>
+                                    <div class="col-md-4 col-sm-2 col-xs-4">
+                                                        <textarea id="textarea"
+                                                                  rows="6"
+                                                                  name="reason"
+                                                                  type="text"
+                                                                  class="form-control col-md-7 col-xs-12"
+                                                                  required="required"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="pricing_footer">
+                                    {% if e == '0' %}
+                                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>提交成功！</strong>
+                                        </div>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        <div class="col-md-3 col-sm-6 col-xs-12 col-md-offset-3">
+                                            <button type="reset" class="btn btn-primary">重置</button>
+                                            <button type="submit" class="btn btn-success">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

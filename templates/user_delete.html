@@ -71,7 +71,7 @@
                         {% else %}
                         <div class="pricing_footer">
                             <a href="{{ url_for('user_cut', user_id=user['user_id']) }}" class="btn btn-danger" role="button">确认删除</a>
-                            <a href="{{ url_for('user_list', ) }}" class="btn btn-success" role="button">取消</a>
+                            <a href="{{ url_for('user_list') }}" class="btn btn-success" role="button">取消</a>
                         </div>
                         {% endif %}
                     </div>
